@@ -1,4 +1,10 @@
 maptool.egg-info
+*.vasp
+*.poscar
+*.mol
+*.xyz
+*.lammps
+*.xsf
 *.o
 *.so
 *.pyc
@@ -22,3 +28,5 @@ setuptools*
 *.log
 .coverage
 .tests
+*.xyz 
+*POSCAR*

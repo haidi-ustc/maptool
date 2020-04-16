@@ -2,7 +2,16 @@
 # coding: utf-8
 
 import sys
+from os import path
 import platform
+
+readme_file = path.join(path.dirname(path.abspath(__file__)), 'README.md')
+try:
+    from m2r import parse_from_file
+    readme = parse_from_file(readme_file)
+except ImportError:
+    with open(readme_file) as f:
+         readme = f.read()
 
 from setuptools import setup, find_packages, Extension
 from setuptools.command.build_ext import build_ext as _build_ext
@@ -11,19 +20,19 @@ default_prefix='maptool'
 setup(
     name="maptool",
     packages=find_packages(),
-    version="0.1.0",
-    setup_requires=['pymatgen','dpdata'],
-    install_requires=[],
-    package_data={},
+    use_scm_version={'write_to': 'maptool/_version.py'},
+    setup_requires=['setuptools_scm'],
+    install_requires=["pymatgen","ase","dpdata"],
+    #package_data={'maptool.external.pyxtal.database': ['*.csv', '*.json']},
     author="haidi",
     author_email="haidi@mail.ustc.edu.cn",
     maintainer="haidi",
     maintainer_email="haidi@mail.ustc.edu.cn",
     url="https://github.com/haidi-ustc/maptools",
-    license="MIT",
+    license="GNU Lesser General Public License v3 (LGPLv3)",
     description=default_prefix+" is a pre- and post-processing software for materials science"
-                "This software is based on Pymatgen and some open-source Python library.",
-    keywords=["VASP", "Lammps", "QuantumEspresso","ASE","Pymatgen",
+                "This software is based on Pymatgen, ASe and  some open-source Python libraries.",
+    keywords=["VASP", "LAMMPS", "QuantumEspresso","ASE","Pymatgen",
               "electronic", "structure", "analysis", "phase", "diagrams"],
     classifiers=[
         "Programming Language :: Python :: 3.6",
