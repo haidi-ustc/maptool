@@ -7,6 +7,8 @@ from  maptool.core.strain import  strain_operation
 from  maptool.core.twodim import  twod_operation
 from  maptool.core.mpdb import    get_mp_banddos, get_mp_structure,\
                                   get_mp_phase_graph, get_mp_properties
+from  maptool.core.analysis import  structure_symmetry,get_primitive_cell,\
+                                    get_conventional_cell
 from  maptool.code.vasp import   vaspinput,vaspout
 from  maptool.util.utils import wait,sepline,wait_sep,your_choice,warn_tip, \
                                 multi_structs
