@@ -30,3 +30,44 @@ $ git clone git@github.com:haidi-ustc/maptool.git
 $ cd maptool
 $ python setup.py install
 ```
+To use online retrieval function, the materials project `API_KEK` should be added into the ~/.bashrc. The `API_KEY` can be obtained from [materials project](https://www.materialsproject.org).  
+
+```
+export MAPI_KEY='fdafdwe203213faf22'
+```
+use your own key replace the above string and write it into ~/.bashrc file.
+
+After installation, excute the following command.
+```
+mpt -i
+```
+it will shows similar information:
+```
+maptool
+--------
+
+Version: 0.1.dev1+gb771228.d20200416
+Path:    /home/dgx/software/maptools/maptool
+Date:    May 16, 2018
+
+Python version=3.7.4 (default, Aug 13 2019, 20:35:49) 
+[GCC 7.3.0]
+
+   pymongo      3.9.0   /home/dgx/miniconda3/lib/python3.7/site-packages/pymongo
+     numpy     1.17.3   /home/dgx/miniconda3/lib/python3.7/site-packages/numpy
+     scipy      1.3.1   /home/dgx/miniconda3/lib/python3.7/site-packages/scipy
+    mayavi      4.7.1   /home/dgx/miniconda3/lib/python3.7/site-packages/mayavi
+matplotlib      3.1.1   /home/dgx/miniconda3/lib/python3.7/site-packages/matplotlib
+      tqdm     4.36.1   /home/dgx/miniconda3/lib/python3.7/site-packages/tqdm
+    dpdata 0.1.2.dev191+ga54a7ab.d20200407   /home/dgx/miniconda3/lib/python3.7/site-packages/dpdata-0.1.2.dev191+ga54a7ab.d20200407-py3.7.egg/dpdata
+      nose            Not Found
+  coverage            Not Found
+    spglib     1.14.1   /home/dgx/miniconda3/lib/python3.7/site-packages/spglib
+    pyhull            Not Found
+  pymatgen 2019.10.16   /home/dgx/miniconda3/lib/python3.7/site-packages/pymatgen
+      qmpy            Not Found
+       ase     3.19.0   /home/dgx/miniconda3/lib/python3.7/site-packages/ase
+    pandas     0.25.2   /home/dgx/miniconda3/lib/python3.7/site-packages/pandas
+```
+
+
