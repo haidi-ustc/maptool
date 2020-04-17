@@ -25,6 +25,8 @@ def read_structures(cls=None):
     print('a.vasp b.vasp')
     print('paramter format, i.e. :')
     print('*.cif')
+    print('paramter format, i.e. :')
+    print('NaCl[1-2].cif')
     structs=[] 
     wait_sep()
     label .input
@@ -51,7 +53,6 @@ def read_structures(cls=None):
     return structures
 
 def read_structures_from_file(fname):
-    #print(fname)
     try:
       atom=read(fname)
       return  ase2pmg(atoms)

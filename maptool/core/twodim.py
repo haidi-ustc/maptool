@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 import math
+from pymatgen import Structure
+from monty.serialization import dumpfn,loadfn
 from maptool.util.utils import wait,wait_sep,multi_structs
 from maptool.io.read_structure import read_structures,ase2pmg
-from pymatgen import Structure
 
 
 def move_to_zcenter(struct):
@@ -93,6 +94,7 @@ def twod_operation(choice):
             fname="%10.5f"%(i_strain)+'_w.vasp' # structure  applied with in-plan strain  and ripple    
             struct_w_ripple.to(filename=fname.strip(),fmt='poscar')        
         return True
+
     elif choice=="2":
         structs,fnames=read_structures()
         multi_structs(structs,fnames)
@@ -220,12 +222,13 @@ def twod_operation(choice):
         wait_sep()
         in_str=wait()
         sigma=float(in_str)
+        for struct,fname in zip(structs,fnames):
         orig_struct=new_struct.copy()
         new_struct =new_struct.copy()
         natom=orig_struct.num_sites
         lat=orig_struct.lattice.matrix
         pos=orig_struct.frac_coords
-        nps=37
+        nps=36
         phi=np.linspace(0,360,nps)*np.pi/180
         vzz=C12/C22
         temp_num=(C11*C22-C12**2)/(C22*C66)
@@ -260,17 +263,19 @@ def twod_operation(choice):
     elif choice=="7":
         structs,fnames=read_structures()
         multi_structs(structs,fnames)
-        natom=struct.num_sites
-        atom_index,in_str=atom_selection(struct)
-        selective_dynamics=[[True for col in range(3)] for row in range(natom)]  
-        for i in range(natom):
-               if i in atom_index:
+        for struct,fname in zip(structs,fnames):
+            natom=struct.num_sites
+            atom_index,in_str=atom_selection(struct)
+            selective_dynamics=[[True for col in range(3)] for row in range(natom)]  
+            for i in range(natom):
+                if i in atom_index:
                     selective_dynamics[i]=[False,False,False]
-        tmp_struct=Structure(struct.lattice,struct.species,struct.frac_coords,site_properties={'selective_dynamics':selective_dynamics})
-        poscar=Poscar(tmp_struct)
-        poscar.comment=poscar.comment+' |--> '+in_str
-        poscar.write_file('Fixed.vasp')
-        return
+            tmp_struct=Structure(struct.lattice,struct.species,struct.frac_coords,site_properties={'selective_dynamics':selective_dynamics})
+            poscar=Poscar(tmp_struct)
+            poscar.comment=poscar.comment+' |--> '+in_str
+            fname='Fixed_'+fname+'.vasp'
+            poscar.write_file(fname)
+        return True
 
     elif choice=="8":
         print('your choice ?')
@@ -282,7 +287,8 @@ def twod_operation(choice):
 
         if _choice==1:
            mpid=None
-           struct=readstructure()
+           structs,fnames=read_structures()
+           multi_structs(structs,fnames)
         else:
            print("input the mp-id for your structure")
            wait_sep()
@@ -292,7 +298,8 @@ def twod_operation(choice):
           
         film,substrates=make_connect(mpid=mpid,struct=struct)
         df=get_subs(film,substrates)
-        df.to_csv('substrate.csv', sep=',', header=True, index=True)
+        dumpfn(df.to_dict(),'substrate.json',indent=4)
+        #df.to_csv('substrate.csv', sep=',', header=True, index=True)
         return True
     else:
         print("unkonw choice")

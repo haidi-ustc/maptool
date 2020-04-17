@@ -1,11 +1,17 @@
 #!/usr/bin/env python
-from operator import itemgetter
-import itertools
 import os
+import itertools
 import pandas as pd
-from pymatgen.analysis.substrate_analyzer import SubstrateAnalyzer
 from pymatgen import MPRester
-from tqdm import tqdm
+from operator import itemgetter
+from pymatgen.analysis.substrate_analyzer import SubstrateAnalyzer
+
+try:
+   from tqdm import tqdm
+   TQDM=True
+except ImportError:
+   TQDM=False
+
 from maptool.core.mpdb import check_apikey
 
 
@@ -34,7 +40,12 @@ def get_subs(film,substrates):
     all_matches = []
     sa = SubstrateAnalyzer()
 
-    for s in tqdm(substrates):
+    if TQDM:
+        _substrates=tqdm(substrates)
+    else:
+        _substrates=substrate
+        
+    for s in _substrates:
         substrate = s["structure"]
     
         # Calculate all matches and group by substrate orientation

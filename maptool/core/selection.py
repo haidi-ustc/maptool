@@ -4,6 +4,9 @@ import numpy as np
 from pymatgen import  Element, Structure
 from maptool.util.utils import wait,wait_sep
 
+#TODO
+# select atom by sphere
+
 def atom_selection(struct):
     int_str=_atom_selection()
     if "|" in in_str.strip():
