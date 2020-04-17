@@ -222,7 +222,7 @@ def twod_operation(choice):
         wait_sep()
         in_str=wait()
         sigma=float(in_str)
-        for struct,fname in zip(structs,fnames):
+        #for struct,fname in zip(structs,fnames):
         orig_struct=new_struct.copy()
         new_struct =new_struct.copy()
         natom=orig_struct.num_sites

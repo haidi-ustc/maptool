@@ -75,7 +75,8 @@ def read_structures_from_files(fnames):
         #print(structure)
         if structure is not None:
             structures.append(structure)
-            final_fnames.append(fname)
+            if '/' in fname:
+                 final_fnames.append(fname.replace('/','_'))
     return structures,final_fnames
 
 if __name__=='__main__':
