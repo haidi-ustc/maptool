@@ -15,7 +15,8 @@ def move_to_zcenter(struct):
 def twod_operation(choice):
     assert choice in ["1","2","3","4","5","6","7"] 
     if choice=="1":
-        struct=readstructure()
+        structs,fnames=read_structures()
+        multi_structs(structs,fnames)
         margin_dist=1.0 # 
         assert(struct.lattice.is_orthogonal)
         print("input the supercell scaling factor")
@@ -93,7 +94,8 @@ def twod_operation(choice):
             struct_w_ripple.to(filename=fname.strip(),fmt='poscar')        
         return True
     elif choice=="2":
-        struct=readstructure()
+        structs,fnames=read_structures()
+        multi_structs(structs,fnames)
         print("input the number of layers")
         wait_sep()
         in_str=wait()
@@ -122,7 +124,8 @@ def twod_operation(choice):
  
     elif choice=="3":
         ProperDist=3.5  # Ang
-        struct=readstructure()
+        structs,fnames=read_structures()
+        multi_structs(structs,fnames)
         (atom_index,in_str)=atom_selection(struct)
         print("input the splitting distance, 10 Ang is enough!")
         wait_sep()
@@ -163,7 +166,8 @@ def twod_operation(choice):
         return
 
     elif choice=="4":
-        struct=readstructure()
+        structs,fnames=read_structures()
+        multi_structs(structs,fnames)
         new_struct=move_to_zcenter(struct)
         struct_thickness=np.max(new_struct.cart_coords[:,2])-np.min(new_struct.cart_coords[:,2])
         vac_layer_thickness=new_struct.lattice.c-struct_thickness
@@ -182,13 +186,15 @@ def twod_operation(choice):
         return
 
     elif choice=="5":
-        struct=readstructure()
+        structs,fnames=read_structures()
+        multi_structs(structs,fnames)
         new_struct=move_to_zcenter(struct)
         new_struct.to(filename='z-center.vasp',fmt='poscar')
         return
 
     elif choice==6:
-        struct=readstructure()
+        structs,fnames=read_structures()
+        multi_structs(structs,fnames)
         assert(struct.lattice.is_orthogonal)
         try:
            import sympy
@@ -252,7 +258,8 @@ def twod_operation(choice):
         return True
 
     elif choice=="7":
-        struct=read_structure()
+        structs,fnames=read_structures()
+        multi_structs(structs,fnames)
         natom=struct.num_sites
         atom_index,in_str=atom_selection(struct)
         selective_dynamics=[[True for col in range(3)] for row in range(natom)]  

@@ -30,3 +30,4 @@ setuptools*
 .tests
 *.xyz 
 *POSCAR*
+doc/_build*

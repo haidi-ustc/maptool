@@ -6,7 +6,7 @@ import pandas as pd
 from pymatgen.analysis.substrate_analyzer import SubstrateAnalyzer
 from pymatgen import MPRester
 from tqdm import tqdm
-from maptool.util.utils import check_apikey
+from maptool.core.mpdb import check_apikey
 
 
 def make_connect(mpid=None,struct=None):

@@ -8,6 +8,7 @@ def build_operation(choice):
     assert choice in ["1","2","3"]
     if choice=="1":
         structs,fnames=read_structures()
+        multi_structs(structs,fnames)
         wait_sep()
         tip=        """
 Several options are available:
@@ -29,7 +30,6 @@ c. A number, which simply scales all lattice vectors by the
         scaling_list=[int(x) for x in in_str.split()]
         print("scaling list:")
         print(scaling_list)
-        multi_structs(structs,fnames)
         for struct,fname in zip(structs,fnames):
             if len(scaling_list)==1:
                 scales=scaling_list[0]
