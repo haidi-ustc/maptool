@@ -107,13 +107,13 @@ def select_function(choice):
        if choice=="0":
           return None
        elif choice=="1":
-          return generate_all_input(struct)
+          return generate_all_input(structs,fnames)
        elif choice=="2":
-          return generate_incar(struct)
+          return generate_incar(structs,fnames)
        elif choice=="3":
-          return generate_kpoint(struct)
+          return generate_kpoint(structs,fnames)
        elif choice=="4":
-          return generate_potcar(struct)
+          return generate_potcar(structs,fnames)
        else:
           print("unknown choice, check the input")
           goto .input1

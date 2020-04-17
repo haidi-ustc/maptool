@@ -1,12 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 import os
-import sys
-import string
-import copy
-from   datetime import datetime
 from   optparse import OptionParser, OptionGroup
-from   glob import glob
 from   maptool.menu import head,menu,tail
 from   maptool.util.utils import box_center
 from   maptool import info

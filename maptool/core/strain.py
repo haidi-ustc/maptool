@@ -6,6 +6,7 @@ from maptool.util.utils import wait,wait_sep,multi_structs,your_choice
 from maptool.io.read_structure import read_structures,ase2pmg
 
 from maptool.core.selection import atom_selection
+from maptool.io.data_io import DataIO
 from pymatgen.core.surface import generate_all_slabs, SlabGenerator
 from ase.io import read,write
 from  goto import with_goto
@@ -67,15 +68,19 @@ def strain_operation():
 def generate_strain_structure(structs,fnames,strain):
     for struct,fname in zip(structs,fnames):
         i_count=0
-        #fis_name='index_strain_'+fname+'.dat'
-        #fis=open(fis_name,'w')
         for i_strain in strain:
             outfile_name='strain_'+str(i_count)+'_'+fname+'.vasp'
             struct_cp=struct.copy()
             struct_cp.apply_strain(i_strain)
-            #fis.writelines("%3d %7.4f %7.4f %7.4f\n"%(i_count,strain[i_count][0],strain[i_count][1],strain[i_count][2]))
             struct_cp.to(filename=outfile_name,fmt='poscar')
             i_count+=1
-        #fis.close()
-#       print(strain)
+        fis_name='index_strain_'+fname+'.dat'
+        data=np.hstack((np.array([range(len(strain))]).T,np.array(strain))) 
+        ret=DataIO(data, col_head=['#index','eps_x','eps_y','eps_z'], fmt_all ="%4d %7.4f %7.4f %7.4f\n")
+        ret.write(fis_name)
 
+if __name__=="__main__":
+    from pymatgen import Structure
+    structure=Structure.from_file('POSCAR')
+    strain=[[0.01,0.0,0.0],[0.02,0.0,0.0]]
+    generate_strain_structure([structure,structure],["POSCAR",'POSCAR1'],strain)

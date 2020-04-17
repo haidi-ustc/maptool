@@ -17,10 +17,10 @@ def check_apikey():
        mpr = MPRester(apikey)
        return(mpr)
     except:
-       print(" you have to get a MAPI_KEY from "+web)
-       print(" and execute following command:")
-       print(' echo "export MAPI_KEY=yourkey">> ~/.bashrc')
-       print(" source ~/.bashrc")
+       print("You have to get a MAPI_KEY from "+web)
+       print("and execute following command:")
+       print('echo "export MAPI_KEY=yourkey">> ~/.bashrc')
+       print("source ~/.bashrc")
        os._exit(0)
 
 def get_mp_banddos():

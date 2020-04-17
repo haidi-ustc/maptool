@@ -144,7 +144,6 @@ def menu():
 #    sepline(ch=" lammps tools ",sp='=')
 #    print('{} >>> {}'.format('li1','prepare input files'))
 
-
 if __name__=='__main__':
     head()
     menu()
