@@ -22,7 +22,7 @@ setup(
     packages=find_packages(),
     use_scm_version={'write_to': 'maptool/_version.py'},
     setup_requires=['setuptools_scm'],
-    install_requires=["pymatgen","ase","dpdata"],
+    install_requires=["pymatgen","ase","dpdata","pyxtal"],
     #package_data={'maptool.external.pyxtal.database': ['*.csv', '*.json']},
     author="haidi",
     author_email="haidi@mail.ustc.edu.cn",

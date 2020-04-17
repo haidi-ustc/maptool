@@ -31,3 +31,4 @@ setuptools*
 *.xyz 
 *POSCAR*
 doc/_build*
+tmp

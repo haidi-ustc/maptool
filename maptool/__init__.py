@@ -15,10 +15,8 @@ __email__     = "haidi@mail.ustc.edu.cn"
 __status__    = "Development"
 __date__      = "May 16, 2018"
 
-
 DEBUG = True
 NAME  = 'maptool'
-
 
 mpt_log = logging.getLogger(__name__)
 mpt_log.setLevel(logging.DEBUG)
@@ -31,7 +29,7 @@ mpt_log.addHandler(mpt_logf)
 
 modules=['numpy', 'scipy', 'mayavi', 'matplotlib', 'tqdm', 'dpdata',
          'nose', 'coverage', 'spglib', 'pyhull', 'pymatgen', 'qmpy',
-         'ase']
+         'ase', 'pandas']
 try: 
    import pymongo
    PYMONGO=True
@@ -54,14 +52,11 @@ def info():
     import sys
     print('Python version=' + sys.version + '\n')
 
-    try:
+    if PYMONGO:
         mm = __import__('pymongo')
         print('%10s %10s   %s' % ('pymongo', mm.version, mm.__path__[0]))
-    except ImportError:
-        print('pymongo Not Found')
 
-    for modui in ['numpy', 'scipy', 'mayavi', 'matplotlib', 'tqdm',
-                  'future', 'nose', 'coverage', 'spglib', 'pyhull', 'pymatgen', 'qmpy', ]:
+    for modui in modules:
         try:
             mm = __import__(modui)
             print('%10s %10s   %s' % (modui, mm.__version__, mm.__path__[0]))
