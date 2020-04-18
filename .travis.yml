@@ -3,12 +3,13 @@ python:
   - "3.7"
 # command to install dependencies
 env:
-  - PYMATGEN_VERSION=2019.10.16
-  - ASE_VERSION=3.19.0
+  matrix:
+    - PYMATGEN_VERSION=2019.10.16
+    #  - ASE_VERSION=3.19.0
 before_install:
   - pip install --upgrade pip coverage codecov
   - pip install pymatgen==$PYMATGEN_VERSION
-  - pip install ase==$ASE_VERSION
+    #  - pip install ase==$ASE_VERSION
 install:
   - pip install .
 # command to run tests
