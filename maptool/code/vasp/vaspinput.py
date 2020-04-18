@@ -334,14 +334,14 @@ def generate_kpoint(struct,dirname='.'):
   Generate KPOINTS file according to user's choice. Currently supports:
     1 : automatic k-grid
     2 : Band structure k-path
-    3 : HSE06 k-grid
+    3 : HSE06 band structure
     4 : 3D plot k-grid
   '''
     sepline(ch=' generate KPOINTS file ',sp='-')
     print("your choice?")
     print('{} >>> {}'.format('1','automatic k-grid '))
     print('{} >>> {}'.format('2','Band structure k-path'))
-    print('{} >>> {}'.format('3','HSE06 k-grid'))
+    print('{} >>> {}'.format('3','HSE06 band structure'))
     print('{} >>> {}'.format('4','3D plot k-grid'))
     wait_sep()
     in_str=""
@@ -462,7 +462,40 @@ def band_structure_kpath(struct,dirname,nkpts=30):
     linemode_kpoints.write_file(os.path.join(dirname, "KPOINTS"))
 
 
-def hse06_k_mesh(struct):
+def hse06_bandstructure_kpoints(struct, nkpts=20):
+  '''
+  Generate HSE06 bandstructure KPOINTS
+  Append high-symmetry path points to the IBZKPT file and set weight of
+  all the high-symmetry path points to zero and then write to "KPOINTS"
+
+  High-symmetry path kpoints is saved as a backup file named 'KPOINTS_bak'
+
+  Note: We asssert the IBZKPT file is valid
+  '''
+    def chunks(lst, n):
+      for i in range(0, len(lst), n):
+        yield lst[i: i+n]
+
+    hsk = HighSymmKpath(struct)
+    sym_kpts = Kpoints.automatic_linemode(nkpts, hsk)
+    sym_kpts.write_file("KPOINTS_bak")
+
+    kpts = sym_kpts.kpts
+    nsegs = sym_kpts.num_kpts
+
+    kpoints_result = []
+    for rng in chunks(kpts, 2):
+      start, end = rng
+      kpoints_result.append(np.linspace(start, end, nsegs))
+    kpoints_result = np.array(kpoints_result).reshape((-1, 3))
+
+    KPOINTS = open('IBZKPT').readlines()
+    for i in range(kpoints_result.shape[0]):
+      x, y, z = kpoints_result[i, :]
+      KPOINTS.append("{:20.14f}{:20.14f}{:20.14f}{:14}\n".format(x, y, z, 0))
+    KPOINTS[1] = "{:8}\n".format(len(KPOINTS) - 3)
+    with open("KPOINTS", 'w') as f:
+      print("".join(KPOINTS), file=f)
     pass
 
 def generate_potcar(struct,dirname='.'):
