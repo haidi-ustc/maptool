@@ -1,4 +1,5 @@
 * fix bugs , add comment, add manual
+* unittest
 * calculation of cohp
 * molecule and crystal match
 * finger print of structure
@@ -10,12 +11,12 @@
 * doping structure
 * mechanical properties input preparation and output analysis
 * database (local , mongodb)
-* workflow ( vasp)
+* workflow (vasp)
 * rdf calculation
 * effect mass
 * carries mability 
 * command parsing
-
+* pip install  or Anacoda sh package install 
 * Vasp related
    - band dos visualization
    - wavecar visualization
