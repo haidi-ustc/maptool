@@ -1,16 +1,6 @@
 import os
 def random_operation(): 
    os._exit(0)
-def covert_operation(): 
-   pass
-def build_operation(): 
-   pass
-def cleave_operation(): 
-   pass
-def strain_operation(): 
-   pass
-def twoD_operation(): 
-   pass
 def structure_symmetry(): 
    pass
 def structure_finger_print(): 

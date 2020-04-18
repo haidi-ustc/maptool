@@ -22,8 +22,7 @@ setup(
     packages=find_packages(),
     use_scm_version={'write_to': 'maptool/_version.py'},
     setup_requires=['setuptools_scm'],
-    install_requires=["pymatgen","ase","dpdata","pyxtal"],
-    #package_data={'maptool.external.pyxtal.database': ['*.csv', '*.json']},
+    install_requires=["pymatgen","ase","dpdata","pyxtal","pandas"],
     author="haidi",
     author_email="haidi@mail.ustc.edu.cn",
     maintainer="haidi",
@@ -32,6 +31,8 @@ setup(
     license="GNU Lesser General Public License v3 (LGPLv3)",
     description=default_prefix+" is a pre- and post-processing software for materials science"
                 "This software is based on Pymatgen, ASe and  some open-source Python libraries.",
+    long_description=readme,
+    long_description_content_type="text/markdown",
     keywords=["VASP", "LAMMPS", "QuantumEspresso","ASE","Pymatgen",
               "electronic", "structure", "analysis", "phase", "diagrams"],
     classifiers=[
