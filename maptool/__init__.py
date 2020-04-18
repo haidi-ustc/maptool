@@ -18,13 +18,13 @@ __date__      = "May 16, 2018"
 DEBUG = True
 NAME  = 'maptool'
 
-mpt_log = logging.getLogger(__name__)
-mpt_log.setLevel(logging.DEBUG)
-mpt_logf = logging.FileHandler(os.getcwd()+os.sep+'mpt.log')
-mpt_logf_formatter=logging.Formatter('%(asctime)s - %(levelname)s : %(message)s')
-#mpt_logf_formatter=logging.Formatter('%(asctime)s - %(name)s - [%(filename)s:%(funcName)s - %(lineno)d ] - %(levelname)s \n %(message)s')
-mpt_logf.setFormatter(mpt_logf_formatter)
-mpt_log.addHandler(mpt_logf)
+mlog = logging.getLogger(__name__)
+mlog.setLevel(logging.DEBUG)
+mlogf = logging.FileHandler(os.getcwd()+os.sep+'mpt.log')
+mlogf_formatter=logging.Formatter('%(asctime)s - %(levelname)s : %(message)s')
+#mlogf_formatter=logging.Formatter('%(asctime)s - %(name)s - [%(filename)s:%(funcName)s - %(lineno)d ] - %(levelname)s \n %(message)s')
+mlogf.setFormatter(mlogf_formatter)
+mlog.addHandler(mlogf)
 
 
 modules=['numpy', 'scipy', 'mayavi', 'matplotlib', 'tqdm', 'dpdata',

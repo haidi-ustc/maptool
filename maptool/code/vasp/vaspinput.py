@@ -18,7 +18,7 @@ from pymatgen.util.string import str_delimited
 from pymatgen.util.io_utils import clean_lines
 from pymatgen.electronic_structure.core import Magmom
 from maptool.util.utils import *
-from maptool import NAME,mpt_log
+from maptool import NAME,mlog
 
 ediff_opt=1e-5
 ediff_oth=1e-6
@@ -317,8 +317,8 @@ def generate_incar(struct,dirname='.',encut=1.5):
             pot_elems.append(pot.element)
             max_encut_elems.append(pot.PSCTR['ENMAX'])
         struct_elems=[x.value for x in struct.types_of_specie]
-        mpt_log.debug('Element order in POSCAR %s' % (struct_elems))
-        mpt_log.debug('Element order in POTCAR %s' % (pot_elems))
+        mlog.debug('Element order in POSCAR %s' % (struct_elems))
+        mlog.debug('Element order in POTCAR %s' % (pot_elems))
         if struct_elems==pot_elems:
            pass
         else:
