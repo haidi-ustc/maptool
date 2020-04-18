@@ -54,7 +54,7 @@ def read_structures(cls=None):
 
 def read_structures_from_file(fname):
     try:
-      atom=read(fname)
+      atoms=read(fname)
       return  ase2pmg(atoms)
     except:
        try:
