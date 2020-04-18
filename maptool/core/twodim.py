@@ -190,21 +190,20 @@ def twod_operation(choice):
     elif choice=="5":
         structs,fnames=read_structures()
         multi_structs(structs,fnames)
-        new_struct=move_to_zcenter(struct)
-        new_struct.to(filename='z-center.vasp',fmt='poscar')
-        return
+        for struct,fname in zip(structs,fnames):
+            new_struct=move_to_zcenter(struct)
+            new_struct.to(filename='z-center_'+fname+'.vasp',fmt='poscar')
+        return True
 
     elif choice==6:
         structs,fnames=read_structures()
         multi_structs(structs,fnames)
-        assert(struct.lattice.is_orthogonal)
         try:
            import sympy
         except:
            print("you must install sympy module")
            return None
 
-        new_struct=move_to_zcenter(struct)
         print("input the elastic of material by order : C11 C12 C22 C66")
         wait_sep()
         in_str=""
@@ -222,42 +221,44 @@ def twod_operation(choice):
         wait_sep()
         in_str=wait()
         sigma=float(in_str)
-        #for struct,fname in zip(structs,fnames):
-        orig_struct=new_struct.copy()
-        new_struct =new_struct.copy()
-        natom=orig_struct.num_sites
-        lat=orig_struct.lattice.matrix
-        pos=orig_struct.frac_coords
-        nps=36
-        phi=np.linspace(0,360,nps)*np.pi/180
-        vzz=C12/C22
-        temp_num=(C11*C22-C12**2)/(C22*C66)
-        d1=C11/C22 +1.0-temp_num;
-        d2=-(2.0*C12/C22-temp_num);
-        d3=C11/C22;
-        F=sigma*C22/(C11*C22-C12**2.0); 
-        Poisson=(vzz*(np.cos(phi))**4.0-d1*(np.cos(phi))**2.0*(np.sin(phi))**2.0+vzz*(np.sin(phi))**4.0)/\
-                ((np.cos(phi))**4.0+d2*(np.cos(phi))**2.0*(np.sin(phi))**2.0+d3*(np.sin(phi))**4.0)
-        
-        eps_theta=F*((np.cos(phi))**4+d2*(np.cos(phi))**2.0*(np.sin(phi))**2.0+d3*(np.sin(phi))**4.0) 
-        t = sympy.Symbol('t', real=True)
-        e = sympy.Symbol('e', real=True)
-        v = sympy.Symbol('v', real=True)
-        eprim=sympy.Matrix([[e+1,0],[ 0,1-e*v]])
-        R=sympy.Matrix([[sympy.cos(t),-sympy.sin(t)],[ sympy.sin(t),sympy.cos(t)]])
-        eps_mat=R*eprim*R.adjugate()
-        for k in range(len(phi)):
-            cur__phi=phi[k]*180/np.pi 
-            Rot=eps_mat.subs({e:eps_theta[k],v:Poisson[k],t:phi[k]})
-            fname=str(k)+'.vasp'
-            final_lat=np.matrix(np.eye(3))
-            final_lat[0,0]=Rot[0,0]
-            final_lat[0,1]=Rot[0,1]
-            final_lat[1,0]=Rot[1,0]
-            final_lat[1,1]=Rot[1,1]
-            lat_new=lat*final_lat
-            tmp_struct=Structure(lat_new,new_struct.species,pos)
-            tmp_struct.to(filename=fname,fmt='poscar') 
+        for struct,fname in zip(structs,fnames):
+             assert(struct.lattice.is_orthogonal)
+             new_struct=move_to_zcenter(struct)
+             orig_struct=new_struct.copy()
+             new_struct =new_struct.copy()
+             natom=orig_struct.num_sites
+             lat=orig_struct.lattice.matrix
+             pos=orig_struct.frac_coords
+             nps=36
+             phi=np.linspace(0,360,nps)*np.pi/180
+             vzz=C12/C22
+             temp_num=(C11*C22-C12**2)/(C22*C66)
+             d1=C11/C22 +1.0-temp_num;
+             d2=-(2.0*C12/C22-temp_num);
+             d3=C11/C22;
+             F=sigma*C22/(C11*C22-C12**2.0); 
+             Poisson=(vzz*(np.cos(phi))**4.0-d1*(np.cos(phi))**2.0*(np.sin(phi))**2.0+vzz*(np.sin(phi))**4.0)/\
+                     ((np.cos(phi))**4.0+d2*(np.cos(phi))**2.0*(np.sin(phi))**2.0+d3*(np.sin(phi))**4.0)
+             
+             eps_theta=F*((np.cos(phi))**4+d2*(np.cos(phi))**2.0*(np.sin(phi))**2.0+d3*(np.sin(phi))**4.0) 
+             t = sympy.Symbol('t', real=True)
+             e = sympy.Symbol('e', real=True)
+             v = sympy.Symbol('v', real=True)
+             eprim=sympy.Matrix([[e+1,0],[ 0,1-e*v]])
+             R=sympy.Matrix([[sympy.cos(t),-sympy.sin(t)],[ sympy.sin(t),sympy.cos(t)]])
+             eps_mat=R*eprim*R.adjugate()
+             for k in range(len(phi)):
+                 cur__phi=phi[k]*180/np.pi 
+                 Rot=eps_mat.subs({e:eps_theta[k],v:Poisson[k],t:phi[k]})
+                 fname=str(k)+"_"+fname+'.vasp'
+                 final_lat=np.matrix(np.eye(3))
+                 final_lat[0,0]=Rot[0,0]
+                 final_lat[0,1]=Rot[0,1]
+                 final_lat[1,0]=Rot[1,0]
+                 final_lat[1,1]=Rot[1,1]
+                 lat_new=lat*final_lat
+                 tmp_struct=Structure(lat_new,new_struct.species,pos)
+                 tmp_struct.to(filename=fname,fmt='poscar') 
         return True
 
     elif choice=="7":
