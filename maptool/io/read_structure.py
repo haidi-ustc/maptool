@@ -17,16 +17,17 @@ def pmg2ase(structure):
  
 @with_goto
 def read_structures(cls=None):
-    print('Input the structure filename')
-    print('supported structure format: xsf .vasp POSCAR .nc .json .xyz ... ')
-    print('paramter format, i.e. :')
-    print('a.vasp')
-    print('paramter format, i.e. :')
-    print('a.vasp b.vasp')
-    print('paramter format, i.e. :')
-    print('*.cif')
-    print('paramter format, i.e. :')
-    print('NaCl[1-2].cif')
+    print('''\
+Input the structure filename
+supported structure format: xsf .vasp POSCAR .nc .json .xyz ...
+paramter format, i.e. :
+a.vasp
+paramter format, i.e. :
+a.vasp b.vasp
+paramter format, i.e. :
+*.cif
+paramter format, i.e. :
+NaCl[1-2].cif''')
     structs=[] 
     wait_sep()
     label .input

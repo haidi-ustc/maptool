@@ -55,53 +55,59 @@ def tail():
 
 def structural_operation():
     sepline(ch=" structural operation ",sp='=')
-    print('{} >>> {}'.format('a1','random operation'))
-    print('{} >>> {}'.format('a2','covert operation'))
-    print('{} >>> {}'.format('a3','build operation'))
-    print('{} >>> {}'.format('a4','cleave operation'))
-    print('{} >>> {}'.format('a5','strain operation'))
-    print('{} >>> {}'.format('a6','2D structure operation'))
+    print('''\
+a1 >>> random operation
+a2 >>> convert operation
+a3 >>> build operation
+a4 >>> cleave opeartion
+a5 >>> strain operation
+a6 >>> 2D structure operation''')
 
 def structural_analysis():
     sepline(ch=" structural analysis ",sp='=')
-    print('{} >>> {}'.format('b1','structure symmetry'))
-    print('{} >>> {}'.format('b2','structure finger print'))
-    print('{} >>> {}'.format('b3','structure difference'))
-    print('{} >>> {}'.format('b4','get primitive cell'))
-    print('{} >>> {}'.format('b5','get conventional cell'))
-    print('{} >>> {}'.format('b6','get XRD pattern'))
+    print('''\
+b1 >>> structure symmetry
+b2 >>> structure finger print
+b3 >>> structure difference
+b4 >>> get primitive cell
+b5 >>> get conventional cell
+b6 >>> get XRD pattern''')
 
 def vasp_inout():
     sepline(ch=" vasp in/out tools ",sp='=')
-    print('{} >>> {}'.format('c1','prepare input files'))
-    print('{} >>> {}'.format('c2','analysis output files'))
-    print('{} >>> {}'.format('c3','summary output files'))
+    print('''\
+c1 >>> prepare input files
+c2 >>> analysis output files
+c3 >>> summary output files''')
 
 def vasp_workflow():
     sepline(ch=" vasp calclation workflow",sp='=')
-    print('{} >>> {}'.format('d1','optimize structure'))
-    print('{} >>> {}'.format('d2','calculate band structure'))
-    print('{} >>> {}'.format('d3','calculate band structure HSE06'))
-    print('{} >>> {}'.format('d4','calculate dos'))
-    print('{} >>> {}'.format('d5','calculate dos by HSE06'))
-    print('{} >>> {}'.format('d6','calculate elastic properties'))
-    print('{} >>> {}'.format('d7','calculate phonon'))
-    print('{} >>> {}'.format('d8','execute MD simulation'))
+    print('''\
+d1 >>> optimize structure
+d2 >>> calculate band structure
+d3 >>> calculate band structure HSE06
+d4 >>> calculate dos
+d5 >>> calculate dos by HSE06
+d6 >>> calculate elastic properties
+d7 >>> calculate phonon
+d8 >>> execute MD simulation''')
 
 def MP_db():
     sepline(ch=" Materials Project database ",sp='=')
-    print('{} >>> {}'.format('e1','get band/dos by mp-ID'))
-    print('{} >>> {}'.format('e2','get structure from materialsproject database'))
-    print('{} >>> {}'.format('e3','get properties by mp-ID'))
-    print('{} >>> {}'.format('e4','get phase graph'))
+    print('''\
+e1 >>> get band/dos by mp-ID
+e2 >>> get structure from materialsproject database
+e3 >>> get properties by mp-ID
+e4 >>> get phase graph''')
 
 def local_db():
     sepline(ch=" local database ",sp='=')
-    print('{} >>> {}'.format('f1','check local database'))
-    print('{} >>> {}'.format('f2','get entry by l-ID'))
-    print('{} >>> {}'.format('f3','get entry by formula'))
-    print('{} >>> {}'.format('f4','get entry by element'))
-    print('{} >>> {}'.format('f5','insert entry into database'))
+    print('''\
+f1 >>> check local database
+f2 >>> get entry by l-ID
+f3 >>> get entry by formula
+f4 >>> get entry by element
+f5 >>> insert entry into database''')
 
 @with_goto
 def menu():
