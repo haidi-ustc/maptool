@@ -9,7 +9,7 @@ from pymatgen.symmetry.bandstructure import HighSymmKpath
 from pymatgen.io.vasp.sets import MITRelaxSet,MITNEBSet,MITMDSet,MPRelaxSet,MPHSERelaxSet,MPStaticSet,\
               MPHSEBSSet,MPNonSCFSet,MPSOCSet,MVLElasticSet,MVLGWSet,MVLSlabSet,MVLGBSet, MVLNPTMDSet
 from pymatgen import Structure
-from pymatgen.io.vasp.inputs import Poscar,Kpoints,Kpoints,Potcar
+from pymatgen.io.vasp.inputs import Poscar,Kpoints,Potcar
 from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
 from monty.io import zopen
 from tabulate import tabulate
@@ -22,6 +22,26 @@ from maptool import mlog
 from maptool.code.vasp.templates import *
 
 def generate_incar(struct,dirname='.',encut=1.5):
+  """
+  Generate INCAR according to user's choice. Now these templates are available:
+    a >>> Optimization calculation
+    b >>> SCF calculation
+    c >>> BAND structure calculation
+    d >>> DOS calculation
+    e >>> ELF calculation
+    f >>> Bader charge calculation
+    g >>> AIMD NPT calculation
+    h >>> AIMD NVT calculation
+    i >>> Potential calculation
+    j >>> Partial charge calculation
+    k >>> STM image calculation
+    l >>> optical properties calculation
+    m >>> Mechanical properties calculation
+    n >>> Frequency calculation
+    o >>> Transition state calculation
+    p >>> Phonopy + vasp DFPT calculation
+    q >>> Phonopy + vasp finite difference calculation
+  """
     try:
         pots=Potcar.from_file(os.path.join(dirname, "POTCAR"))
         pot_elems=[]
@@ -114,7 +134,7 @@ def generate_incar(struct,dirname='.',encut=1.5):
             incar_str+=incar.get_string(pretty=True,comment=comment)
         return incar_str
     incar_str=''
-    if choice=='a':
+    if choice=='a': # Opt calculation
 
        for dict_paras in basic_paras:
            incar,comment=Incar.from_dict(eval(dict_paras))
@@ -122,7 +142,7 @@ def generate_incar(struct,dirname='.',encut=1.5):
        if len(in_str)>1:
           incar_str+=parse_extra_incar(in_str)
  
-    elif choice=='b':
+    elif choice=='b': # SCF calculation
        ion_relax['NSW']=0
        elec_relax1['EDIFF']=ediff_oth
        output_paras['LCHGARG']=True
@@ -133,7 +153,7 @@ def generate_incar(struct,dirname='.',encut=1.5):
        if len(in_str)>1:
            incar_str+=parse_extra_incar(in_str)
 
-    elif choice=='c':
+    elif choice=='c': # band structure calculation
        ion_relax['NSW']=0
        elec_relax1['EDIFF']=ediff_oth
        start_paras['ICHARG']=11
@@ -143,7 +163,7 @@ def generate_incar(struct,dirname='.',encut=1.5):
        if len(in_str)>1:
            incar_str+=parse_extra_incar(in_str)
 
-    elif choice=='d':
+    elif choice=='d': # DOS calculation
        ion_relax['NSW']=0
        elec_relax1['EDIFF']=ediff_oth
        start_paras['ICHARG']=11
@@ -153,7 +173,7 @@ def generate_incar(struct,dirname='.',encut=1.5):
        if len(in_str)>1:
            incar_str+=parse_extra_incar(in_str)
 
-    elif choice=='e':
+    elif choice=='e': # ELF calculatio
        ion_relax['NSW']=0
        elec_relax1['EDIFF']=ediff_oth
        output_paras['LCHGARG']=True
@@ -164,7 +184,7 @@ def generate_incar(struct,dirname='.',encut=1.5):
        if len(in_str)>1:
            incar_str+=parse_extra_incar(in_str)
 
-    elif choice=='f':
+    elif choice=='f': # Bader charge calculation
        ion_relax['NSW']=0
        elec_relax1['EDIFF']=ediff_oth
        output_paras['LCHGARG']=True
@@ -175,7 +195,7 @@ def generate_incar(struct,dirname='.',encut=1.5):
        if len(in_str)>1:
            incar_str+=parse_extra_incar(in_str)
 
-    elif choice=='g':
+    elif choice=='g': # AIMD NPT calculation
        basic_paras.append('md_NPT_paras')
        ion_relax['NSW']=md_step
        ion_relax['IBRION']=0
@@ -187,7 +207,7 @@ def generate_incar(struct,dirname='.',encut=1.5):
        if len(in_str)>1:
            incar_str+=parse_extra_incar(in_str)
 
-    elif choice=='h':
+    elif choice=='h': # AIMD NVT calculation
        basic_paras.append('md_NVT_paras')
        ion_relax['NSW']=md_step
        ion_relax['IBRION']=0
@@ -200,7 +220,7 @@ def generate_incar(struct,dirname='.',encut=1.5):
        if len(in_str)>1:
            incar_str+=parse_extra_incar(in_str)
 
-    elif choice=='i':
+    elif choice=='i': # Potential calculation
        ion_relax['NSW']=0
        elec_relax1['EDIFF']=ediff_oth
        output_paras['LCHGARG']=True
@@ -211,7 +231,7 @@ def generate_incar(struct,dirname='.',encut=1.5):
        if len(in_str)>1:
            incar_str+=parse_extra_incar(in_str)
 
-    elif choice=='j':
+    elif choice=='j': # Partial charge calculation
        basic_paras.append('partial_paras')
        ion_relax['NSW']=0
        start_paras['ISTART']=1
@@ -223,7 +243,7 @@ def generate_incar(struct,dirname='.',encut=1.5):
        if len(in_str)>1:
            incar_str+=parse_extra_incar(in_str)
       
-    elif choice=='k':
+    elif choice=='k': # STM image calculation
        basic_paras.append('stm_paras')
        ion_relax['NSW']=0
        start_paras['ISTART']=1
@@ -235,7 +255,7 @@ def generate_incar(struct,dirname='.',encut=1.5):
        if len(in_str)>1:
            incar_str+=parse_extra_incar(in_str)
 
-    elif choice=='l':
+    elif choice=='l': # optical properties calculation
        basic_paras.append('optics_paras')
        ion_relax['NSW']=0
        start_paras['ISTART']=1
@@ -246,7 +266,7 @@ def generate_incar(struct,dirname='.',encut=1.5):
        if len(in_str)>1:
            incar_str+=parse_extra_incar(in_str)
        
-    elif choice=='m':  
+    elif choice=='m': # Mechanical properties calculation
        basic_paras.append('stm_paras')
        ion_relax['NSW']=1
        ion_relax['NFREE']=4
@@ -259,7 +279,7 @@ def generate_incar(struct,dirname='.',encut=1.5):
        if len(in_str)>1:
            incar_str+=parse_extra_incar(in_str)
 
-    elif choice=='n':
+    elif choice=='n': # Frequency calculation
        ion_relax['NSW']=1
        ion_relax['NFREE']=4
        ion_relax['IBRION']=5
@@ -271,7 +291,7 @@ def generate_incar(struct,dirname='.',encut=1.5):
        if len(in_str)>1:
            incar_str+=parse_extra_incar(in_str)
 
-    elif choice=='o':
+    elif choice=='o': # Transition state calculation
        basic_paras.append('neb_paras')
        ion_relax['POTIM']=0
        ion_relax['EDIFFG']=ediffg_neb
@@ -283,7 +303,7 @@ def generate_incar(struct,dirname='.',encut=1.5):
        if len(in_str)>1:
            incar_str+=parse_extra_incar(in_str)
      
-    elif choice=='p':
+    elif choice=='p': # Phonopy + vasp DFPT calculation
        ion_relax['IBRION']=8
        elec_relax1['EDIFF']=ediff_phon
        basic_paras.append(grid_paras)
@@ -293,7 +313,7 @@ def generate_incar(struct,dirname='.',encut=1.5):
        if len(in_str)>1:
            incar_str+=parse_extra_incar(in_str)
 
-    else:
+    elif 'q' == choice: # Phonopy + vasp finite difference calculation
        ion_relax['NSW']=0
        ion_relax['IBRION']=-1
        elec_relax1['EDIFF']=ediff_phon
@@ -304,9 +324,19 @@ def generate_incar(struct,dirname='.',encut=1.5):
        if len(in_str)>1:
            incar_str+=parse_extra_incar(in_str)
 
+    else: # left empty for extend
+      raise Exception(f"choice '{choice}' not valid!")
+
     write_file(os.path.join(dirname, "INCAR"),incar_str)
 
 def generate_kpoint(struct,dirname='.'):
+  '''
+  Generate KPOINTS file according to user's choice. Currently supports:
+    1 : automatic k-grid
+    2 : Band structure k-path
+    3 : HSE06 k-grid
+    4 : 3D plot k-grid
+  '''
     sepline(ch=' generate KPOINTS file ',sp='-')
     print("your choice?")
     print('{} >>> {}'.format('1','automatic k-grid '))
@@ -330,6 +360,19 @@ def generate_kpoint(struct,dirname='.'):
       generate_3Dkpoints(struct,dirname)
 
 def auto_kgrid(struct,dirname):
+  '''
+  Generate KPOINTS according given mesh density.
+    input the dimensionality and mesh grid density
+    dimensionality can be 0D 1D 2D 3D
+    500 for low grid density
+    1000 for medium grid density
+    2000 for high grid density
+    3000 for accurate density
+    input format: 1 1000
+
+    note: in 1D system, mesh grids for x & y direction = 1
+          in 2D system, mesh grids for z direction = 1
+  '''
     print(" input the dimensionality and mesh grid density ")
     print(" dimensionality can be 0D 1D 2D 3D")
     print(" 500 for low grid density")
@@ -348,13 +391,31 @@ def auto_kgrid(struct,dirname):
     if dim==0:
        kps.kpts=[[1,1,1]]
     if dim==1:
+      # 1 for x and y direction
+      # e.g. :
+      # ""
+      # comment
+      # M or G
+      # 1 1 <density>
+      # ""
        kps.kpts[0][0]=1
        kps.kpts[0][1]=1
     if dim==2:
+      # 1 for z direction
+      # e.g. :
+      # ""
+      # comment
+      # M or G
+      # <dens1> <dens2> 1
+      # ""
        kps.kpts[0][2]=1
     kps.write_file(os.path.join(dirname, "KPOINTS"))
 
 def generate_3Dkpoints(struct,dirname):
+  """
+  Generate 3D system KPOINTS file according to given accuracy
+  User should input a float number to set the accuracy.
+  """
     #print(" input the dimensionality and mesh grid density ")
     tip='''
     Accuracy Levels: (1) Low:    0.04~0.03;
@@ -388,6 +449,10 @@ def generate_3Dkpoints(struct,dirname):
 
 
 def band_structure_kpath(struct,dirname,nkpts=30):
+  """
+  Generate KPOINTS file for band structure calculation via pymatgen's symmetry
+  analyzing system.
+  """
     #struct=Structure.from_file('POSCAR')
     #ana_struct=SpacegroupAnalyzer(struct)
     #pst=ana_struct.find_primitive()
@@ -401,6 +466,9 @@ def hse06_k_mesh(struct):
     pass
 
 def generate_potcar(struct,dirname='.'):
+  """
+  Generate POTCAR according to input structure via pymatgen's POTCAR module
+  """
     avail_pot =" ".join(Potcar.FUNCTIONAL_CHOICES)
     tip="""
     Available Pseudo-potentials are:
