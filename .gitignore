@@ -31,3 +31,4 @@ setuptools*
 *.xyz 
 doc/_build*
 tmp
+.eggs

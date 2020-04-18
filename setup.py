@@ -22,7 +22,7 @@ setup(
     packages=find_packages(),
     use_scm_version={'write_to': 'maptool/_version.py'},
     setup_requires=['setuptools_scm'],
-    install_requires=["pymatgen","ase","dpdata","pandas"],
+    install_requires=["pymatgen==2019.10.16","ase==3.19.0","dpdata","pandas","goto-statement"],
     author="haidi",
     author_email="haidi@mail.ustc.edu.cn",
     maintainer="haidi",
@@ -36,7 +36,6 @@ setup(
     keywords=["VASP", "LAMMPS", "QuantumEspresso","ASE","Pymatgen",
               "electronic", "structure", "analysis", "phase", "diagrams"],
     classifiers=[
-        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Topic :: Scientific/Engineering :: Physics",
         "Topic :: Scientific/Engineering :: Chemistry",
