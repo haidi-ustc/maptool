@@ -181,3 +181,15 @@ def get_mp_properties():
     dumpfn(data,filename)
     return True
 
+def get_mp_film_substrate(mpid=None,struct=None):
+    mpr = check_apikey()
+    # Get list of material IDs for common substrates
+    mids = mpr.get_all_substrates()
+    substrates = mpr.query({"material_id": {"$in": mids}}, ["structure", "material_id"])
+    if mpid is not None:
+       film = mpr.get_structure_by_material_id(mpid)
+    if struct is not None:
+       film = struct
+       assert isinstance(struct,Structure)
+    return film,substrates
+

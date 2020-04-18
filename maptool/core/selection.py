@@ -2,49 +2,50 @@
 import os
 import numpy as np
 from pymatgen import  Element, Structure
-from maptool.util.utils import wait,wait_sep
+from maptool.util.utils import wait,wait_sep,warn_tip
 
 #TODO
 # select atom by sphere
 
 def atom_selection(struct):
-    int_str=_atom_selection()
+    in_str=_atom_selection()
     if "|" in in_str.strip():
        atom_index_list=parse_range(in_str,struct)
     else:
-       for str in in_str.strip():
-           if str.isalpha():
-              atom_index_list=parse_label(in_str,struct)
-              return atom_index_list,in_str
-       atom_index_list=parse_index(in_str)
-       return atom_index_list,in_str
+       in_str=in_str.strip()
+       if in_str[0].isalpha():
+          atom_index_list=parse_label(in_str,struct)
+       else:
+          atom_index_list=parse_index(in_str)
+    return atom_index_list,in_str
 
 def _atom_selection():
-    r'''
+    '''
     select atoms by three different schemes:
     1. by atomic index
     2. by element symbol
     3. by fractional coordinates range
     '''
     print("")
-    print("    input data according to tips")
+    print("input data according to tips")
     tip="""
-     select atoms by following ways:
-     1. atomic index in POSCAR
-        i.e. :  1 2 4-8 10 12-30
-        i.e. :  1 2 4 8 10 
-     2. atomic label
-        i.e. :  Si  O
-     3. atomic position
-        i.e. :  0 0.5 | 0.2 0.4 | 0.3 0.7
-        this means atoms with 0<x<0.5, 
-        0.2<y<0.4 and 0.3<z<0.7 will be seleted
-        or just specific the z coordinates,
-        i.e. :  ||0.3 0.7
-        """
+select atoms by following ways:
+1. atomic index in POSCAR
+   i.e. :  1 2 4-8 10 12-30
+   i.e. :  1 2 4 8 10 
+2. atomic label
+   i.e. :  Si  O
+3. atomic position
+   i.e. :  0 0.5 | 0.2 0.4 | 0.3 0.7
+   this means atoms with 0<x<0.5, 
+   0.2<y<0.4 and 0.3<z<0.7 will be seleted
+   or just specific the z coordinates,
+   i.e. :  ||0.3 0.7
+   """
     print(tip)
     wait_sep()
     in_str=wait()
+    return in_str
 
 def parse_index(in_str):
     atom_index=[]
@@ -155,3 +156,9 @@ Direct
    in_str="0 0.5 || 0.3 0.7"
    ret=parse_range(in_str,st)
    print(ret)
+   
+   ret=parse_index("1 2 4")
+   print(ret)
+
+   #ret,in_str=atom_selection(st)
+   #print(ret,in_str)
