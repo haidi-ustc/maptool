@@ -463,15 +463,15 @@ def band_structure_kpath(struct,dirname,nkpts=30):
 
 
 def hse06_bandstructure_kpoints(struct, nkpts=20):
-  '''
-  Generate HSE06 bandstructure KPOINTS
-  Append high-symmetry path points to the IBZKPT file and set weight of
-  all the high-symmetry path points to zero and then write to "KPOINTS"
+    '''
+    Generate HSE06 bandstructure KPOINTS
+    Append high-symmetry path points to the IBZKPT file and set weight of
+    all the high-symmetry path points to zero and then write to "KPOINTS"
 
-  High-symmetry path kpoints is saved as a backup file named 'KPOINTS_bak'
+    High-symmetry path kpoints is saved as a backup file named 'KPOINTS_bak'
 
-  Note: We asssert the IBZKPT file is valid
-  '''
+    Note: We asssert the IBZKPT file is valid
+    '''
     def chunks(lst, n):
       for i in range(0, len(lst), n):
         yield lst[i: i+n]
