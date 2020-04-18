@@ -1,7 +1,8 @@
 ## Introduction
+[![Build Status](https://travis-ci.org/haidi-ustc/maptool.svg?branch=master)](https://travis-ci.org/haidi-ustc/maptool)
 Maptool (Material Project Tool) is an open source python package for pre- and post- process input and output of first principles simulation software, which is based on Pymatgen and ASE and other open source python packages. Currently, the VASP code are mainly supported, later it will support more DFT codes. The package allows for generating, building, modifying and analysing of both molecular and crystal structure. Besides, maptool can automatically generating the input files for different DFT code and analysing the output, all results are saved with pretty format and figure based on matplotlib. See the [documentation](https://github.com/haidi-ustc/maptool/tree/master/doc/) for information about installation and usage.
 
-## Current Features:
+## Features:
 * Random generation of atomic (3D, 2D, and 1D) crystals and point group clusters for a given symmetry group and stoichiometry
 * Building of cluster, shell strcuture and surface
 * Add strain to crystal structure
