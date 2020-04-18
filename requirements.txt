@@ -1,0 +1,15 @@
+codecov==2.0.22
+coverage==5.1
+dpdata==0.1.17
+goto-statement==1.2
+libpyspg==1.4.1
+matplotlib==3.2.1
+monty==3.0.2
+numpy==1.18.2
+pandas==1.0.3
+scipy==1.4.1
+spglib==1.15.0
+sympy==1.5.1
+tqdm==4.45.0
+ase==3.19.0
+pymatgen==2019.10.16

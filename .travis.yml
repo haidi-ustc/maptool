@@ -5,17 +5,15 @@ python:
 # command to install dependencies
 env:
   matrix:
-  - PYMATGEN_VERSION=2019.1.13
-  - PYMATGEN_VERSION=2019.7.30
-  - ASE_VERSION=3.19.0
+  - PYMATGEN_VERSION=2019.10.16
 before_install:
   - pip install --upgrade pip coverage codecov
   - pip install pymatgen==$PYMATGEN_VERSION
-  - pip install ase==$ASE_VERSION
 install:
   - pip install .
 # command to run tests
 script:
-  - coverage run --source=./maptool -m unittest -v && coverage report
+  - cd tests && coverage run --source=../maptool -m unittest -v && coverage report && cd ..
 after_success:
   - codecov
+

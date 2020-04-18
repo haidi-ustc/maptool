@@ -29,6 +29,6 @@ setuptools*
 .coverage
 .tests
 *.xyz 
-*POSCAR*
 doc/_build*
 tmp
+.eggs

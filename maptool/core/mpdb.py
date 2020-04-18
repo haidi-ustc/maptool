@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# coding: utf-8
 import os
 from maptool.util.utils import check_matplotlib
 from maptool.util.utils import wait_sep,wait,procs,sepline

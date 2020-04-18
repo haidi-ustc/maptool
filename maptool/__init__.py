@@ -4,9 +4,9 @@ import logging
 import os
 
 try:
-        from ._version import version as __version__
+   from ._version import version as __version__
 except ImportError:
-        from .__about__ import __version__
+   from .__about__ import __version__
 
 __author__    = "Haidi Wang"
 __copyright__ = "Copyright 2018"

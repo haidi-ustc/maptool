@@ -22,26 +22,26 @@ from maptool import mlog
 from maptool.code.vasp.templates import *
 
 def generate_incar(struct,dirname='.',encut=1.5):
-  """
-  Generate INCAR according to user's choice. Now these templates are available:
-    a >>> Optimization calculation
-    b >>> SCF calculation
-    c >>> BAND structure calculation
-    d >>> DOS calculation
-    e >>> ELF calculation
-    f >>> Bader charge calculation
-    g >>> AIMD NPT calculation
-    h >>> AIMD NVT calculation
-    i >>> Potential calculation
-    j >>> Partial charge calculation
-    k >>> STM image calculation
-    l >>> optical properties calculation
-    m >>> Mechanical properties calculation
-    n >>> Frequency calculation
-    o >>> Transition state calculation
-    p >>> Phonopy + vasp DFPT calculation
-    q >>> Phonopy + vasp finite difference calculation
-  """
+    """
+    Generate INCAR according to user's choice. Now these templates are available:
+      a >>> Optimization calculation
+      b >>> SCF calculation
+      c >>> BAND structure calculation
+      d >>> DOS calculation
+      e >>> ELF calculation
+      f >>> Bader charge calculation
+      g >>> AIMD NPT calculation
+      h >>> AIMD NVT calculation
+      i >>> Potential calculation
+      j >>> Partial charge calculation
+      k >>> STM image calculation
+      l >>> optical properties calculation
+      m >>> Mechanical properties calculation
+      n >>> Frequency calculation
+      o >>> Transition state calculation
+      p >>> Phonopy + vasp DFPT calculation
+      q >>> Phonopy + vasp finite difference calculation
+    """
     try:
         pots=Potcar.from_file(os.path.join(dirname, "POTCAR"))
         pot_elems=[]
@@ -330,13 +330,13 @@ def generate_incar(struct,dirname='.',encut=1.5):
     write_file(os.path.join(dirname, "INCAR"),incar_str)
 
 def generate_kpoint(struct,dirname='.'):
-  '''
-  Generate KPOINTS file according to user's choice. Currently supports:
-    1 : automatic k-grid
-    2 : Band structure k-path
-    3 : HSE06 band structure
-    4 : 3D plot k-grid
-  '''
+    '''
+    Generate KPOINTS file according to user's choice. Currently supports:
+      1 : automatic k-grid
+      2 : Band structure k-path
+      3 : HSE06 band structure k-path
+      4 : 3D plot k-grid
+    '''
     sepline(ch=' generate KPOINTS file ',sp='-')
     print("your choice?")
     print('{} >>> {}'.format('1','automatic k-grid '))
@@ -360,19 +360,19 @@ def generate_kpoint(struct,dirname='.'):
       generate_3Dkpoints(struct,dirname)
 
 def auto_kgrid(struct,dirname):
-  '''
-  Generate KPOINTS according given mesh density.
-    input the dimensionality and mesh grid density
-    dimensionality can be 0D 1D 2D 3D
-    500 for low grid density
-    1000 for medium grid density
-    2000 for high grid density
-    3000 for accurate density
-    input format: 1 1000
+    '''
+    Generate KPOINTS according given mesh density.
+      input the dimensionality and mesh grid density
+      dimensionality can be 0D 1D 2D 3D
+      500 for low grid density
+      1000 for medium grid density
+      2000 for high grid density
+      3000 for accurate density
+      input format: 1 1000
 
-    note: in 1D system, mesh grids for x & y direction = 1
-          in 2D system, mesh grids for z direction = 1
-  '''
+      note: in 1D system, mesh grids for x & y direction = 1
+            in 2D system, mesh grids for z direction = 1
+    '''
     print(" input the dimensionality and mesh grid density ")
     print(" dimensionality can be 0D 1D 2D 3D")
     print(" 500 for low grid density")
@@ -412,10 +412,10 @@ def auto_kgrid(struct,dirname):
     kps.write_file(os.path.join(dirname, "KPOINTS"))
 
 def generate_3Dkpoints(struct,dirname):
-  """
-  Generate 3D system KPOINTS file according to given accuracy
-  User should input a float number to set the accuracy.
-  """
+    """
+    Generate 3D system KPOINTS file according to given accuracy
+    User should input a float number to set the accuracy.
+    """
     #print(" input the dimensionality and mesh grid density ")
     tip='''
     Accuracy Levels: (1) Low:    0.04~0.03;
@@ -449,10 +449,10 @@ def generate_3Dkpoints(struct,dirname):
 
 
 def band_structure_kpath(struct,dirname,nkpts=30):
-  """
-  Generate KPOINTS file for band structure calculation via pymatgen's symmetry
-  analyzing system.
-  """
+    """
+    Generate KPOINTS file for band structure calculation via pymatgen's symmetry
+    analyzing system.
+    """
     #struct=Structure.from_file('POSCAR')
     #ana_struct=SpacegroupAnalyzer(struct)
     #pst=ana_struct.find_primitive()
@@ -499,9 +499,9 @@ def hse06_bandstructure_kpoints(struct, nkpts=20):
     pass
 
 def generate_potcar(struct,dirname='.'):
-  """
-  Generate POTCAR according to input structure via pymatgen's POTCAR module
-  """
+    """
+    Generate POTCAR according to input structure via pymatgen's POTCAR module
+    """
     avail_pot =" ".join(Potcar.FUNCTIONAL_CHOICES)
     tip="""
     Available Pseudo-potentials are:
