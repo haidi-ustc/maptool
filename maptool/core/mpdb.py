@@ -41,7 +41,11 @@ def get_mp_banddos():
     step_count+=1
     proc_str="Reading Band Data From "+ web +" ..."
     procs(proc_str,step_count,sp='-->>')
+
     band=mpr.get_bandstructure_by_material_id(mp_id)
+    if band is None:
+        print("No data obtained online, stop now!")
+        os.exit(0)
 
     step_count+=1
     filename=mp_id+'_band.png'
@@ -54,6 +58,8 @@ def get_mp_banddos():
     proc_str="Reading DOS Data From "+ web +" ..."
     procs(proc_str,step_count,sp='-->>')
     dos=mpr.get_dos_by_material_id(mp_id)
+    if dos is None:
+        print("No data obtained online, stop now!")
 
     step_count+=1
     filename=mp_id+'_dos.png'
