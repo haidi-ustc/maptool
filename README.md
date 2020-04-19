@@ -46,12 +46,14 @@ mpt -i
 it will shows similar information:
 ```
 maptool
---------
+------------
 
-Version: 0.1.dev1+gb771228.d20200416
+Version: 0.1.dev47+g08014e6.d20200419
 Path:    /home/dgx/software/maptools/maptool
-Date:    May 16, 2018
+Date:    Apr-19-2020
 
+Dependency
+------------
 Python version=3.7.4 (default, Aug 13 2019, 20:35:49) 
 [GCC 7.3.0]
 
@@ -61,11 +63,11 @@ Python version=3.7.4 (default, Aug 13 2019, 20:35:49)
     mayavi      4.7.1   /home/dgx/miniconda3/lib/python3.7/site-packages/mayavi
 matplotlib      3.1.1   /home/dgx/miniconda3/lib/python3.7/site-packages/matplotlib
       tqdm     4.36.1   /home/dgx/miniconda3/lib/python3.7/site-packages/tqdm
-    dpdata 0.1.2.dev191+ga54a7ab.d20200407   /home/dgx/miniconda3/lib/python3.7/site-packages/dpdata-0.1.2.dev191+ga54a7ab.d20200407-py3.7.egg/dpdata
-      nose            Not Found
-  coverage            Not Found
+    dpdata     0.1.2    /home/dgx/miniconda3/lib/python3.7/site-packages/dpdata/dpdata
+      nose      1.3.7   /home/dgx/miniconda3/lib/python3.7/site-packages/nose
+  coverage        5.1   /home/dgx/miniconda3/lib/python3.7/site-packages/coverage
     spglib     1.14.1   /home/dgx/miniconda3/lib/python3.7/site-packages/spglib
-    pyhull            Not Found
+    pyhull   2015.2.1   /home/dgx/miniconda3/lib/python3.7/site-packages/pyhull
   pymatgen 2019.10.16   /home/dgx/miniconda3/lib/python3.7/site-packages/pymatgen
       qmpy            Not Found
        ase     3.19.0   /home/dgx/miniconda3/lib/python3.7/site-packages/ase
