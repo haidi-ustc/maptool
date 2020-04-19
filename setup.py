@@ -21,7 +21,7 @@ today = datetime.date.today().strftime("%b-%d-%Y")
 with open(path.join(default_prefix, '_date.py'), 'w') as fp :
     fp.write('date = \'%s\'' % today)
 
-install_requires=["pymatgen==2019.10.16","ase==3.19.0","dpdata","pandas","goto-statement"],
+install_requires=["pymatgen==2019.10.16","ase==3.19.0","dpdata","pandas","goto-statement","paramiko==2.6.0"],
 
 setup(
     name="maptool",
