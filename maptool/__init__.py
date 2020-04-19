@@ -8,12 +8,16 @@ try:
 except ImportError:
    from .__about__ import __version__
 
+try:
+    from ._date import date as __date__
+except ImportError:
+    __date__ = 'unkown'
+
 __author__    = "Haidi Wang"
 __copyright__ = "Copyright 2018"
 __maintainer__= ""
 __email__     = "haidi@mail.ustc.edu.cn"
 __status__    = "Development"
-__date__      = "May 16, 2018"
 
 DEBUG = True
 NAME  = 'maptool'
@@ -43,11 +47,13 @@ def info():
         both mandatory and optional
     """
 
-    print(NAME+'\n--------\n')
+    print(NAME+'\n------------\n')
     print('Version: ' + __version__)
     print('Path:    ' + __path__[0])
     print('Date:    ' + __date__)
     print()
+    print('Dependency')
+    print('------------')
 
     import sys
     print('Python version=' + sys.version + '\n')

@@ -2,8 +2,11 @@
 # coding: utf-8
 
 import sys
-from os import path
 import platform
+import datetime
+from os import path
+from setuptools import setup, find_packages, Extension
+from setuptools.command.build_ext import build_ext as _build_ext
 
 readme_file = path.join(path.dirname(path.abspath(__file__)), 'README.md')
 try:
@@ -13,16 +16,19 @@ except ImportError:
     with open(readme_file) as f:
          readme = f.read()
 
-from setuptools import setup, find_packages, Extension
-from setuptools.command.build_ext import build_ext as _build_ext
 default_prefix='maptool'
+today = datetime.date.today().strftime("%b-%d-%Y")
+with open(path.join(default_prefix, '_date.py'), 'w') as fp :
+    fp.write('date = \'%s\'' % today)
+
+install_requires=["pymatgen==2019.10.16","ase==3.19.0","dpdata","pandas","goto-statement","paramiko==2.6.0"],
 
 setup(
     name="maptool",
     packages=find_packages(),
     use_scm_version={'write_to': 'maptool/_version.py'},
     setup_requires=['setuptools_scm'],
-    install_requires=["pymatgen==2019.10.16","ase==3.19.0","dpdata","pandas","goto-statement"],
+    install_requires=install_requires,
     author="haidi",
     author_email="haidi@mail.ustc.edu.cn",
     maintainer="haidi",
