@@ -25,7 +25,7 @@ from pymatgen.transformations.site_transformations \
 class StructureChanger:
   def __init__(self,
                structure: Structure):
-    self.old_structure = structure
+    self.old_structure = structure.copy()
     self.operations = []
 
   def scale_volume(self,
@@ -244,3 +244,23 @@ class StructureChanger:
     ns.modify_lattice(Lattice(np.dot(stress, self.old_structure.lattice.matrix)))
     self.operations.append({'deform_cell': stress_eps})
     return ns
+
+  def random_deform_cell(self,
+                         is_diag: bool,
+                         maxdelta: float = 0.01) -> Structure:
+    '''
+    Deform a cell slightly and randomly
+
+    @in
+      - is_diag, bool, whether generate a diagonal transformation matrix or not
+      - maxdelta, float, maximum scalar of deformation
+
+    @out
+      Structure
+    '''
+    stress_eps = np.random.random(6) * 2 * maxdelta - maxdelta
+    if is_diag:
+      stress_eps[:3] = 0
+    else:
+      stress_eps[-3:] = 0
+    return self.deform_cell(stress_eps)
