@@ -6,6 +6,7 @@ from random import randint
 import itertools
 import numpy as np
 from typing import List, Tuple, Dict, Any
+from nptyping import Array
 from pymatgen import (
   Structure,
   Molecule,
@@ -223,3 +224,23 @@ class StructureChanger:
                 if x.symbol == pair[1]]
     index1 = random.choice(indices1)  # select one site belongs to element 1
     return self.swap_site((index0, index1))
+
+  def deform_cell(self,
+                  stress_eps: Array[float]) -> Structure:
+    '''
+    Deform the lattice of the structure
+
+    @in
+      - stress_eps, 1darray, will be converted to a transform matrix
+
+    @out
+      Structure
+    '''
+    ns = self.old_structure.copy()
+    stress = np.eye(3) + np.diag(stress_eps[:3]) +\
+      np.array([[          0.0, stress_eps[3], stress_eps[4]],
+                [stress_eps[3],           0.0, stress_eps[5]],
+                [stress_eps[4], stress_eps[5],           0.0]])
+    ns.modify_lattice(Lattice(np.dot(stress, self.old_structure.lattice.matrix)))
+    self.operations.append({'deform_cell': stress_eps})
+    return ns
