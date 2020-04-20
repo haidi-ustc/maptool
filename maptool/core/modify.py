@@ -253,7 +253,7 @@ class StructureChanger:
 
     @in
       - is_diag, bool, whether generate a diagonal transformation matrix or not
-      - maxdelta, float, maximum scalar of deformation
+      - maxdelta, float, maximum scale of deformation
 
     @out
       Structure
@@ -263,4 +263,19 @@ class StructureChanger:
       stress_eps[:3] = 0
     else:
       stress_eps[-3:] = 0
+    return self.deform_cell(stress_eps)
+
+  def uniq_axis_deform(self,
+                       axis: int,
+                       maxdelta: float = 0.01) -> Structure:
+    '''
+    Deform the structure along a certain axis
+
+    @in
+      - axis, int, 0 -> x, 1 -> y, 2 -> z
+      - maxdelta, float, max scale of deformation
+    '''
+    stress_eps = np.zeros(6)
+    assert axis in [0, 1, 2], f"Selected axis not valid: {axis}"
+    stress_eps[axis] = maxdelta
     return self.deform_cell(stress_eps)
