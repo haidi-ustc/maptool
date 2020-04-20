@@ -304,8 +304,15 @@ class StructureChanger:
     return ns
 
   def random_move_one_atom(self,
-                           mu: float = 0.1,
+                           mu:    float = 0.1,
                            sigma: float = 0.01) -> Structure:
+    '''
+    Randomly move one atom slightly. Scale is determined by gaussian distribution
+
+    @in
+      - mu, float, center of gaussian distribution
+      - sigma, float, dispersion width in gaussian distribution
+    '''
     idx = random.randint(0, len(self.old_structure) - 1)
     radius = np.abs(np.random.normal(mu, sigma))
     theta_x = 2 * np.pi * np.random.random_sample()
@@ -313,6 +320,29 @@ class StructureChanger:
     theta_z = 2 * np.pi * np.random.random_sample()
     vector = self.apply_rotation([1, 0, 0], theta_x, theta_y, theta_z)
     return self.move_one_atom(idx, vector * radius)
+
+  def random_move_many_atoms(self,
+                             epsilon:               float = 0.01,
+                             forbidden_indices: List[int] = [],
+                             forbidden_species: List[str] = []) -> Structure:
+    '''
+    "Randomly move many sites", just as the func name says.
+
+    @in
+      - epsilon, float, move distance
+      - forbidden_indices, [int], indices of sites that will not be moved
+      - forbidden_species, [str], symbols of elements that will not be moved
+    '''
+    for elem in forbidden_species:
+      assert is_valid_symbol(elem), f'Invalid forbidden element input: {elem}'
+
+    ns = self.old_structure.copy()
+    findices = forbidden_indices
+    fspec = forbidden_species
+    for iatom in range(len(self.old_structure)):
+      if iatom not in findices and ns.species[iatom] not in fspec:
+        self.random_move_one_atom(epsilon)
+    return ns
 
   @staticmethod
   def rotation_x(theta: float) -> Array[float]:
