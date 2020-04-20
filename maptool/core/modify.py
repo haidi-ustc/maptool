@@ -5,7 +5,7 @@ import random
 from random import randint
 import itertools
 import numpy as np
-from typing import List, Tuple, Dict
+from typing import List, Tuple, Dict, Any
 from pymatgen import (
   Structure,
   Molecule,
@@ -62,7 +62,8 @@ class StructureChanger:
                 a number of substitution operations is need.
         - inte: not implemented yet
         - vint: not implemented yet
-      - supercell, list of int, len == 3
+      - supercell, [int, int, int]
+      - element, str, must be a valid element symbol
 
     @out
       - Structure
@@ -101,7 +102,7 @@ class StructureChanger:
                 max_index:                      int = 1,
                 min_slab_size:                float = 5.0,
                 min_vacuum_size:              float = 15.0,
-                fix_vacuum_size:               bool = False,
+                is_fix_vacuum_size:            bool = False,
                 bonds: Dict[Tuple[str, str], float] = None,
                 tolerance:                    float = 0.001,
                 max_broken_bonds:               int = 0,
@@ -113,14 +114,41 @@ class StructureChanger:
                 is_repair:                     bool = False,
                 is_in_unit_planes:             bool = False) -> List[Structure]:
     '''
-    Search and return the slab found in the given structure.
+    Search and return the slabs found in the given structure.
 
+    @in
+      - max_index, int, max of miller index.
+        e.g. when max_index = 1 for cubic structure, only (100), (110), (111)
+        miller surfaces are searched.
+      - min_slab_size, float, minimum size in angstroms of layers containing atoms
+      - min_vacuum_size, float, minimum size in angstroms of vacuum layer
+      - is_fix_vacuum_size, bool, Not implemented yet
+      - bonds, {(str, str): float}, specify the maximum length of bond length for
+        given atom pairs to avoid bond broken.
+      - tolerance, float, accuracy
+      - max_broken_bonds, int
+      - is_lll_reduce, bool, whether or not the slabs will be orthogonalized
+      - is_center_slab, bool, whether or not the slabs will be centered between
+        the vacuum layer
+      - is_primitive, bool, whether to reduce any generated slabs to a primitive
+        cell
+      - max_normal_search, If set to a positive integer, the code will conduct a
+        search for a normal lattice vector that is as perpendicular to the surface
+        as possible by considering multiples linear combinations of lattice vectors
+        up to max_normal_search.
+      - is_symmetrize, bool, Whether or not to ensure the surfaces of the slabs
+        are equivalent
+      - is_repair, bool, whether to repair terminations with broken bonds or just
+        omit them
+      - is_in_unit_planes, bool, whether to set min_slab_size and min_vac_size
+        in units of hkl planes (True) or Angstrom (False/default)
+    @out
     '''
 
     st = self.old_structure.copy()
     all_slabs = []
     for miller in get_symmetrically_distinct_miller_indices(st, max_index):
-        if fix_vacuum_size:
+        if is_fix_vacuum_size:
             pass
 
         else:
@@ -143,8 +171,7 @@ class StructureChanger:
 
         if len(slabs) > 0:
             all_slabs.extend(slabs)
-#                for slab in all_slabs:
-#                    slab.make_supercell(supercell)
 
     self.operations.append({'slabs': len(slabs)})
     return all_slabs
+
