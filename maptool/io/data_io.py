@@ -1,10 +1,84 @@
+import os
 import numpy as np
-from   monty.io import zopen
+from monty.io import zopen
 from monty.json import MontyEncoder,MontyDecoder
 from json import dumps,loads
 from copy import deepcopy
 
 class DataIO():
+    """
+    A basic class to operate array data, string or dict data
+    and to convert  into format type, to write data into file.
+
+    :param data: (2D numpy.ndarray or string or dict) data to be formatted
+    :param row_head: (str or list of str) head line for output data
+    :param col_head: (list) first column for output data, then length
+                     must equals to length of np.array
+    :param indent: (int) indent for json data
+    :fmt_all: (str) the format string for every column, must match with
+                    data in every column
+    :fmt_single: (str) every column use the same format 
+
+    Example:
+    >>> rd=np.random.rand(3,4)
+    >>> ret=DataIO(rd)
+    >>> print(ret.get_str())
+
+    0.691986       0.507859       0.770485       0.956558
+    0.525326       0.317083       0.518152       0.486881
+    0.612499       0.889347       0.587508       0.160017
+
+    >>> ret=DataIO(rd*100)
+    >>> print(ret.get_str())
+
+    69.198561      50.785903      77.048507      95.655789
+    52.532644      31.708269      51.815226      48.688147
+    61.249944      88.934738      58.750788      16.001678
+
+    >>> ret=DataIO(rd*1000,fmt_single="%15.3e")
+    >>> print(ret.get_str())
+
+    6.920e+02      5.079e+02      7.705e+02      9.566e+02
+    5.253e+02      3.171e+02      5.182e+02      4.869e+02
+    6.125e+02      8.893e+02      5.875e+02      1.600e+02
+
+    >>> ret=DataIO(rd*100,fmt_all ="%10d %10d %10d % 10d\n")
+    >>> print(ret.get_str())
+
+        69         50         77         95
+        52         31         51         48
+        61         88         58         16
+
+    >>> ret=DataIO(rd*100,fmt_all ="%10d %10.5f %10.4f % 10.3e\n")
+    >>> print(ret.get_str())
+
+    69   50.78590    77.0485  9.566e+01
+    52   31.70827    51.8152  4.869e+01
+    61   88.93474    58.7508  1.600e+01
+
+    >>> col_head="{0:^10s}{1:^10s}{2:^10s}{3:^10s}".format("A","BDD","XXX","NAME")
+    >>> ret=DataIO(rd*100, col_head=col_head, fmt_all ="%10d %10.5f %10.4f % 10.3e\n")
+    >>> print(ret.get_str())
+
+    A        BDD       XXX       NAME   
+    69   50.78590    77.0485  9.566e+01
+    52   31.70827    51.8152  4.869e+01
+    61   88.93474    58.7508  1.600e+01
+
+    >>> col_head="{0:^10s}{1:^10s}{2:^10s}{3:^10s}".format("A","BDD","XXX","NAME")
+    >>> row_head=["A","B","C"]
+    >>> ret=DataIO(rd*100, row_head=row_head,col_head=col_head, fmt_all ="%10d %10.5f %10.4f % 10.3e\n")
+    >>> print(ret.get_str())
+
+              A        BDD       XXX       NAME   
+    A         69   50.78590    77.0485  9.566e+01
+    B         52   31.70827    51.8152  4.869e+01
+    C         61   88.93474    58.7508  1.600e+01
+
+    >>> ret.write('test.txt')
+
+    """
+
     def __init__(self,data,row_head=None,col_head=None,
                  indent=4,fmt_all=None,fmt_single="%15.6f"):
         if row_head:
@@ -89,7 +163,6 @@ class DataIO():
 
 if __name__=='__main__':
     import numpy as np
-    import os
     rd=np.random.rand(3,4)
     ret=DataIO(rd)
     print(ret.get_str())

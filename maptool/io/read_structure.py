@@ -1,5 +1,4 @@
 import os
-import uuid
 import glob
 from ase.io import read 
 from goto import with_goto
