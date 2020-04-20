@@ -302,3 +302,107 @@ class StructureChanger:
 
     self.operations.append({'move_one_atom': (index, ns.species[index], vector)})
     return ns
+
+  def random_move_one_atom(self,
+                           mu: float = 0.1,
+                           sigma: float = 0.01) -> Structure:
+    idx = random.randint(0, len(self.old_structure) - 1)
+    radius = np.abs(np.random.normal(mu, sigma))
+    theta_x = 2 * np.pi * np.random.random_sample()
+    theta_y = 2 * np.pi * np.random.random_sample()
+    theta_z = 2 * np.pi * np.random.random_sample()
+    vector = self.apply_rotation([1, 0, 0], theta_x, theta_y, theta_z)
+    return self.move_one_atom(idx, vector * radius)
+
+  @staticmethod
+  def rotation_x(theta: float) -> Array[float]:
+    """
+    Create a rotation matrix around the 'x' axis
+
+    :param theta: (float) Angle in radians
+    :return: (numpy.ndarray)
+
+    Examples:
+    >>> import numpy as np
+
+    >>> m = rotation_x(np.pi/3)
+
+    >>> np.max(np.dot(m.T, m) - np.eye(3)) < 1E-10
+    True
+
+    """
+    return np.array([[1,             0,              0],
+                     [0, np.cos(theta), -np.sin(theta)],
+                     [0, np.sin(theta),  np.cos(theta)]])
+
+  @staticmethod
+  def rotation_y(theta: float) -> Array[float]:
+    """
+    Create a rotation matrix around the 'y' axis
+
+    :param theta: (float) Angle in radians
+    :return: (numpy.ndarray)
+
+    Example:
+    >>> import numpy as np
+
+    >>> m = rotation_y(np.pi/3)
+
+    >>> np.max(np.dot(m.T, m) - np.eye(3)) < 1E-10
+    True
+
+    """
+    return np.array([[ np.cos(theta), 0, np.sin(theta)],
+                     [             0, 1,             0],
+                     [-np.sin(theta), 0, np.cos(theta)]])
+
+  @staticmethod
+  def rotation_z(theta: float) -> Array[float]:
+    """
+    Create a rotation matrix around the 'z' axis
+
+    :param theta: (float) Angle in radians
+    :return: (numpy.ndarray)
+
+    Examples:
+    >>> import numpy as np
+    >>> m = rotation_z(np.pi/3)
+
+    >>> np.max(np.dot(m.T, m) - np.eye(3)) < 1E-10
+    True
+
+    """
+    return np.array([[np.cos(theta), -np.sin(theta), 0],
+                     [np.sin(theta),  np.cos(theta), 0],
+                     [            0,              0, 1]])
+
+  @classmethod
+  def apply_rotation(cls,
+                     vector: Array[float],
+                     theta_x: float,
+                     theta_y: float,
+                     theta_z: float) -> Array[float]:
+    """
+    Apply a rotation matrix to a vector by succesive rotations around
+    the three axis 'x', 'y' and 'z'
+
+    :param vector:
+    :param theta_x: (float) Angle in radians
+    :param theta_y: (float) Angle in radians
+    :param theta_z: (float) Angle in radians
+    :return: (numpy.ndarray)
+
+  Example:
+    >>> a = apply_rotation([0.1, 0.2, 0.3], 3.1415/3, 3.1415/4, 3.1415/5)
+    >>> b = apply_rotation(a, -3.1415/3, 0, 0)
+    >>> c = apply_rotation(b, 0, -3.1415/4, 0)
+    >>> d = apply_rotation(c, 0, 0, -3.1415/5)
+
+    >>> d
+    array([ 0.1,  0.2,  0.3])
+
+    """
+    return np.round(
+      np.dot(cls.rotation_x(theta_x),
+             np.dot(cls.rotation_y(theta_y),
+                    np.dot(cls.rotation_z(theta_z), vector))), 14)
