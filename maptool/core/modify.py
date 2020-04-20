@@ -246,7 +246,7 @@ class StructureChanger:
     return ns
 
   def random_deform_cell(self,
-                         is_diag: bool,
+                         is_diag:   bool,
                          maxdelta: float = 0.01) -> Structure:
     '''
     Deform a cell slightly and randomly
@@ -266,7 +266,7 @@ class StructureChanger:
     return self.deform_cell(stress_eps)
 
   def uniq_axis_deform(self,
-                       axis: int,
+                       axis:       int,
                        maxdelta: float = 0.01) -> Structure:
     '''
     Deform the structure along a certain axis
@@ -279,3 +279,26 @@ class StructureChanger:
     assert axis in [0, 1, 2], f"Selected axis not valid: {axis}"
     stress_eps[axis] = maxdelta
     return self.deform_cell(stress_eps)
+
+  def move_one_atom(self,
+                    index:           int,
+                    vector: Array[float]) -> Structure:
+    '''
+    Move one atom with given move vector
+
+    @in
+      - index, int, site index
+      - vector, 1darray of float, will be directly added to cart coordinates
+
+    @out
+      Structure
+    '''
+    ns = self.old_structure.copy()
+    cart_coords = ns.cart_coords[index]
+    cart_coords += vector
+    lattice = ns.lattice
+    frac_coords = lattice.get_fractional_coords(cart_coords)
+    ns[index] = ns.species[index], frac_coords
+
+    self.operations.append({'move_one_atom': (index, ns.species[index], vector)})
+    return ns
