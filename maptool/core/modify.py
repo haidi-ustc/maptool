@@ -175,3 +175,51 @@ class StructureChanger:
     self.operations.append({'slabs': len(slabs)})
     return all_slabs
 
+  def swap_site(self,
+                 pair: Tuple[Any, Any]) -> Structure:
+    '''
+    Swap sites according to index
+
+    @in
+      - pair, (int, int), or ([int], [int]), must be valid site indices
+
+    @out
+      Structure
+    '''
+    ns = self.old_structure.copy()
+    ns[pair[0]] = self.old_structure[pair[1]]
+    ns[pair[1]] = self.old_structure[pair[0]]
+    self.operations.append({'swap_site': pair.copy()})
+    return ns
+
+  def random_swap(self,
+                  forbidden_list: List[Tuple[str, str]] = []) -> Structure:
+    '''
+    Ramdomly swap two sites that not belongs to given list of element pairs.
+    ONLY two sites will be swapped.
+
+    @in
+      - forbidden_list, [(str, str)], list of element pairs, which contains the
+        element pairs that will not be swapped
+
+    @out
+      Structure
+    '''
+    assert len(self.old_structure.composition) > 1
+    pairs = list(itertools.combinations(self.old_structure.symbol_set, 2))
+    flist = forbidden_list
+    for pair in pairs:
+      for fpair in flist:
+        if pair == tuple(fpair) or pair == tuple(reversed(fpair)):
+          pairs.remove(pair)
+
+    pair = random.choice(pairs)  # randomly select two elements
+
+    indices0 = [i for i, x in enumerate(self.old_strcucture.species)
+                if x.symbol == pair[0]]
+    index0 = random.choice(indices0)  # select one site belongs to element 0
+
+    indices1 = [i for i, x in enumerate(self.old_strcucture.species)
+                if x.symbol == pair[1]]
+    index1 = random.choice(indices1)  # select one site belongs to element 1
+    return self.swap_site((index0, index1))
