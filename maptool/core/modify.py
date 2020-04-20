@@ -246,7 +246,7 @@ class StructureChanger:
     return ns
 
   def random_deform_cell(self,
-                         is_diag:   bool,
+                         is_diag:   bool = True,
                          maxdelta: float = 0.01) -> Structure:
     '''
     Deform a cell slightly and randomly
@@ -343,6 +343,28 @@ class StructureChanger:
       if iatom not in findices and ns.species[iatom] not in fspec:
         self.random_move_one_atom(epsilon)
     return ns
+
+  def random_change(self,
+                    epsilon: float) -> Structure:
+    '''
+    Randomly change the structure, including deformation, moving all the atoms,
+    swapping two sites and moving one atom.
+
+    @in
+      - epsilon, float, scale of change
+
+    @out
+      Structure
+    '''
+    rand = np.random.random()  # generate a random number in [0, 1)
+    if rand < 0.25:
+      return self.random_deform_cell(maxdelta=epsilon)
+    elif rand < 0.5:
+      return self.random_move_many_atoms(epsilon=epsilon)
+    elif rand < 0.75 and self.old_structure.ntypesp > 1:
+      return self.random_swap()
+    else:
+      return self.random_move_one_atom(mu=epsilon, sigma=0.01)
 
   @staticmethod
   def rotation_x(theta: float) -> Array[float]:
