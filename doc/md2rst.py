@@ -16,4 +16,4 @@ def md_to_rst(from_file, to_file):
             f.write(response.content)
 
 if __name__ == '__main__':
-    md_to_rst("../README.md", "index.rst")
+    md_to_rst("../README.md", "maindoc.rst")

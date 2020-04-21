@@ -41,8 +41,8 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
-    'sphinx.ext.githubpages',
-    'sphinxcontrib.fulltoc'
+    'sphinx.ext.githubpages'
+#    'sphinxcontrib.fulltoc'
     ]
 
 source_suffix = ['.rst', '.md']

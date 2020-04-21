@@ -10,6 +10,7 @@ Subpackages
    maptool.code
    maptool.core
    maptool.database
+   maptool.dispatcher
    maptool.io
    maptool.ui
    maptool.util

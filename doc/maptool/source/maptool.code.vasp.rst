@@ -4,6 +4,14 @@ maptool.code.vasp package
 Submodules
 ----------
 
+maptool.code.vasp.templates module
+----------------------------------
+
+.. automodule:: maptool.code.vasp.templates
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 maptool.code.vasp.vaspinput module
 ----------------------------------
 
