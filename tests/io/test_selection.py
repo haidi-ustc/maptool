@@ -3,8 +3,8 @@ import unittest
 import numpy as np
 from pymatgen import Structure
 from context import maptool
+from maptool.core.selection import parse_range,parse_index,parse_label,parse_sphere
 
-from maptool.core.selection import parse_range,parse_index,parse_label
 class Compare:
     def test_length(self):
         self.assertEqual(len(self.system_1),len(self.system_2))
@@ -16,6 +16,15 @@ class TestIndex(unittest.TestCase,Compare):
         self.in_str = "1 4-6 15"
         self.system_1 = parse_index(self.in_str)
         self.system_2 =[0,3,4,5,14]
+    def tearDown(self):
+        pass
+
+class TestIndex(unittest.TestCase,Compare):
+    def setUp(self):
+        self.in_str = "2 5.5"
+        st=Structure.from_file("POSCAR")
+        self.system_1 = parse_sphere(self.in_str,st)
+        self.system_2 =[1,2,4,5]
     def tearDown(self):
         pass
 

@@ -4,8 +4,6 @@ import numpy as np
 from pymatgen import  Element, Structure
 from maptool.util.utils import wait,wait_sep,warn_tip
 
-#TODO
-# select atom by sphere
 
 def atom_selection(struct):
     in_str=_atom_selection()
@@ -15,6 +13,8 @@ def atom_selection(struct):
        in_str=in_str.strip()
        if in_str[0].isalpha():
           atom_index_list=parse_label(in_str,struct)
+       elif '.' in in_str:
+          atom_index_list=parse_sphere(in_str,struct)
        else:
           atom_index_list=parse_index(in_str)
     return atom_index_list,in_str
@@ -25,6 +25,7 @@ def _atom_selection():
     1. by atomic index
     2. by element symbol
     3. by fractional coordinates range
+    4. by sphere
     '''
     print("")
     print("input data according to tips")
@@ -41,6 +42,8 @@ select atoms by following ways:
    0.2<y<0.4 and 0.3<z<0.7 will be seleted
    or just specific the z coordinates,
    i.e. :  ||0.3 0.7
+4. center atom index and radius (the radius must has decimal point!)
+   i.e  1 3.0
    """
     print(tip)
     wait_sep()
@@ -56,6 +59,14 @@ def parse_index(in_str):
         else:
            atom_index.extend(range(int(i.split('-')[0]),int(i.split('-')[1])+1))
     return [i-1 for i in atom_index]
+
+def parse_sphere(in_str,struct):
+    tmp_str=in_str.split()
+    center_atom_index=int(tmp_str[0])-1 # pymatgen inner index from 0
+    radius=float(tmp_str[1])
+    selected_neighbors=struct.get_all_neighbors(radius)[center_atom_index]
+    index=sorted(set([site.index for site in selected_neighbors]))
+    return index
 
 def parse_label(in_str,struct):
     atom_label= [Element(elem) for elem in in_str.split()]
@@ -158,6 +169,9 @@ Direct
    print(ret)
    
    ret=parse_index("1 2 4")
+   print(ret)
+
+   ret=parse_sphere("1 3.5",st)
    print(ret)
 
    #ret,in_str=atom_selection(st)
