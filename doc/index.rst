@@ -1,15 +1,14 @@
-.. maptool documentation master file, created by
-   sphinx-quickstart on Wed Apr 15 23:42:43 2020.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+#########
+`maptool`
+#########
 
-Welcome to maptool's documentation!
-===================================
+.. _Github: https://github.com/haidi-ustc/maptool
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
 
+   maindoc
+   
 
 
 Indices and tables

@@ -40,6 +40,12 @@ try:
 except ImportError:
    PYMONGO=False
 
+try:
+   from tqdm import tqdm
+   TQDM=True
+except ImportError:
+   TQDM=False
+
 def info():
     """
         Show basic information about """+ NAME + """, its location and version.

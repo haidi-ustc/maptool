@@ -1,5 +1,4 @@
 import os
-import uuid
 import glob
 from ase.io import read 
 from goto import with_goto
@@ -8,15 +7,40 @@ from maptool.util.utils import sepline,wait_sep,wait
 from pymatgen.io.ase import AseAtomsAdaptor
 
 def ase2pmg(atoms):
+    '''
+    convert ase Atoms. obj. to pymatgen Structure obj.
+
+    Args:
+        atoms: Atoms obj.
+
+    Returns:
+        structure: Structure obj.
+    '''
     aaa=AseAtomsAdaptor()
     return  aaa.get_structure(atoms) 
 
 def pmg2ase(structure):
+    '''
+    convert Structure obj. to ase Atoms. obj. 
+
+    Args:
+        structure: Structure obj.
+
+    Returns:
+        atoms: Atoms obj.
+    '''
     aaa=AseAtomsAdaptor()
     return aaa.get_atoms(structure)
  
 @with_goto
-def read_structures(cls=None):
+def read_structures():
+    '''
+    Parsing input string from linux command line. 
+
+    Args:
+        None
+    
+    '''
     print('''\
 Input the structure filename
 supported structure format: xsf .vasp POSCAR .nc .json .xyz ...
@@ -54,6 +78,15 @@ NaCl[1-2].cif''')
     return structures
 
 def read_structures_from_file(fname):
+    '''
+    read structure according to filename 
+
+    Args:
+        fname: (str) input filename
+
+    Returns:
+        structure: Structure obj. or None
+    '''
     try:
       atoms=read(fname)
       return  ase2pmg(atoms)
@@ -68,6 +101,15 @@ def read_structures_from_file(fname):
                return None
 
 def read_structures_from_files(fnames):
+    '''
+    read structures according to filename list
+
+    Args:
+        fnames: (list) input filename list
+
+    Returns:
+        structure: Structure obj. list and filename list
+    '''
     structures=[]
     final_fnames=[]
     assert isinstance(fnames,list)

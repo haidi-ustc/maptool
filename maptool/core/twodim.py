@@ -124,6 +124,22 @@ def multi_layers(structs,fnames,layer_number,layer_distance):
 
 def split(structs,fnames,atom_index,in_str,SplitDistance,NumberSplitSite,ProperDist=3.5,DenseFrac=0.75):
     # len(structs)==1
+    '''
+    split one or several layers from bulk or structures 
+
+    Args:
+        structs: list of Structure obj.
+        fnames: list of str for input file name.
+        atom_index: list, which atom will be split .
+        SplitDistance: float, the largest distance for splitting.
+        NumberSplitSite: int, how many structures to be constructured during split 
+
+    Returns:
+        None
+    Output:
+        split_xxxx.dat  
+        Num_xxx.vasp
+    '''
     col_head="#%(key1)+12s  %(key2)+12s"%{'key1':'index','key2':'distance/Ang'}
     for struct,fname in zip(structs,fnames):
         DensityN=int(NumberSplitSite*DenseFrac)

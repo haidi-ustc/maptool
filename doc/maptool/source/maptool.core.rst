@@ -76,10 +76,10 @@ maptool.core.strain module
    :undoc-members:
    :show-inheritance:
 
-maptool.core.substrate\_matcher module
---------------------------------------
+maptool.core.substrate module
+-----------------------------
 
-.. automodule:: maptool.core.substrate_matcher
+.. automodule:: maptool.core.substrate
    :members:
    :undoc-members:
    :show-inheritance:

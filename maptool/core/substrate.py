@@ -3,14 +3,9 @@
 import os
 import itertools
 import pandas as pd
+from maptool import TQDM
 from operator import itemgetter
 from pymatgen.analysis.substrate_analyzer import SubstrateAnalyzer
-
-try:
-   from tqdm import tqdm
-   TQDM=True
-except ImportError:
-   TQDM=False
 
 
 def groupby_itemkey(iterable, item):
@@ -22,6 +17,7 @@ def match_substrate(film,substrates):
     all_matches = []
     sa = SubstrateAnalyzer()
     if TQDM:
+        from tqdm import tqdm
         _substrates=tqdm(substrates)
     else:
         _substrates=substrate
