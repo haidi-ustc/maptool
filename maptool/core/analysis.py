@@ -118,6 +118,12 @@ def rdf(structures: List[Structure],
         hist, _ = np.histogram(dist[validIndices], bins=nbins, range=range)
         return hist
 
+    assert len(structures) > 0, 'Empty trajectory passed in'
+    assert r > 0, 'Radius must be greater than 0'
+    assert nbins > 0, 'nbin (number of bars of histogram) must be greater than 0'
+    assert len(range) == 2 and\
+        range[0] >= 0 and range[1] > 0 and\
+        range[0] < range[1], 'Invalid range: range[0] and range[1] shoud in (0, ..] and range[0] < range[1]'
     st = structures[0]
     rho = st.num_sites / st.volume
     nsteps = len(structures)
@@ -125,6 +131,10 @@ def rdf(structures: List[Structure],
     if '' == elem_pair[0] and '' == elem_pair[1]:
         Aindices = np.ones(elem_array.shape, dtype=bool)
         Bindices = np.ones(elem_array.shape, dtype=bool)
+    elif '' in elem_pair:
+        raise Exception(f'Invalid element pair: {elem_pair}')
+    elif elem_pair[0] not in elem_array or elem_pair[1] not in elem_array:
+        raise Exception(f'Input elements f{elem_pair} not included in this structure')
     else:
         Aindices = elem_array == elem_pair[0]  # boolean array in order to index A
         Bindices = elem_array == elem_pair[1]  # boolean array in order to index B
