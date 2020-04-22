@@ -133,7 +133,7 @@ def rdf(structures: List[Structure],
     hist *= 0
 
     for (i, s) in enumerate(structures):
-        print(f"Processing {i}")
+        # print(f"Processing {i}")
         hist += rdf_helper(s, Aindices, Bindices)
 
     volumes = shell_volumes(edges)
