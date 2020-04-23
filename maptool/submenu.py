@@ -6,6 +6,7 @@ from  maptool.core.build import  build_operation
 from  maptool.core.cleave import  cleave_operation
 from  maptool.core.strain import  strain_operation
 from  maptool.core.twodim import  twod_operation
+from  maptool.core.randoms import random_operation
 from  maptool.core.mpdb import    get_mp_banddos, get_mp_structure,\
                                   get_mp_phase_graph, get_mp_properties
 from  maptool.core.analysis import  structure_symmetry,get_primitive_cell,\
