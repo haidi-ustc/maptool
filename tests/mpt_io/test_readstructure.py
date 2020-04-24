@@ -5,12 +5,17 @@ import unittest
 import numpy as np
 from ase.io import read
 from pymatgen import Structure,Molecule
-from context import  ( ase2pmg, pmg2ase,
+
+__package__ = 'mpt_io'
+from .context import setUpModule
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from .context import  ( ase2pmg, pmg2ase,
                     read_structures,
                     read_structures_from_file,   
                     read_structures_from_files  )
 
 class TestAse2Pmg(unittest.TestCase):
+    print(os.getcwd())
     def test_length(self):
         self.assertEqual(len(self.system_1),len(self.system_2))
     def test_equal(self):
@@ -72,7 +77,7 @@ class ReadStructureTest(unittest.TestCase,Std):
 
     def test_readstructure2(self):
         self.stub_stdin('POSCAR')
-        structs,fnames=read_structures()
+        structs,fnames=read_structures(tips='')
         self.assertEqual(len(structs),1)
         self.assertEqual(len(fnames),1)
         self.assertEqual(structs[0],self.system_ref)
@@ -80,7 +85,7 @@ class ReadStructureTest(unittest.TestCase,Std):
 
     def test_readstructure2(self):
         self.stub_stdin('POSCAR*')
-        structs,fnames=read_structures()
+        structs,fnames=read_structures(tips='')
         self.assertEqual(len(structs),3)
         self.assertEqual(len(fnames),3)
         for struct,fname in zip(structs,fnames):
@@ -89,13 +94,13 @@ class ReadStructureTest(unittest.TestCase,Std):
 
     def test_readstructure3(self):
         self.stub_stdin('POSCAR[1-2]')
-        structs,fnames=read_structures()
+        structs,fnames=read_structures(tips='')
         self.assertEqual(len(structs),2)
         self.assertEqual(len(fnames),2)
 
     def test_readstructure4(self):
         self.stub_stdin('mol.xyz POSCAR')
-        structs,fnames=read_structures()
+        structs,fnames=read_structures(tips='')
         self.assertEqual(len(structs),2)
         self.assertEqual(len(fnames),2)
         self.assertIsInstance(structs[0],Molecule)

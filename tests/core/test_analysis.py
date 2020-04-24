@@ -1,14 +1,15 @@
-import unittest
-import numpy as np
 import sys
 import os
-sys.path.append(os.path.abspath(os.getcwd() + '/../..'))
-import maptool
-from maptool.core.analysis import rdf
+import unittest
+import numpy as np
 from pymatgen.io.vasp import Xdatcar
 
-THRESHOLD = 0.07
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+__package__ = 'core'
+from .context import setUpModule
+from .context import rdf
 
+THRESHOLD = 0.07
 
 class TestRDF(unittest.TestCase):
     def setUp(self):

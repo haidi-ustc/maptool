@@ -12,6 +12,4 @@ from maptool.dispatcher.Dispatcher import _split_tasks
 from maptool.dispatcher.LocalContext import _identical_files
 
 def setUpModule():
-    print("here")
     os.chdir(os.path.abspath(os.path.dirname(__file__)))
-    print(os.getcwd())

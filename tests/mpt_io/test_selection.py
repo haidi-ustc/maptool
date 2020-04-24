@@ -1,9 +1,12 @@
-import os
+import os,sys
 import unittest
 import numpy as np
 from pymatgen import Structure
-from context import *
-#from maptool.core.selection import parse_range,parse_index,parse_label,parse_sphere
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+__package__ = 'mpt_io'
+from .context import setUpModule
+from .context import parse_range,parse_index,parse_label,parse_sphere
 
 class Compare:
     def test_length(self):
