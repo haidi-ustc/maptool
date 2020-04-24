@@ -2,7 +2,6 @@ maptool.egg-info
 *.vasp
 *.poscar
 *.mol
-*.xyz
 *.lammps
 *.xsf
 *.o
@@ -28,7 +27,6 @@ setuptools*
 *.log
 .coverage
 .tests
-*.xyz 
 doc/_build*
 tmp
 .eggs

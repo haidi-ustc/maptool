@@ -1,6 +1,11 @@
 #!/usr/bin/env python
+import os
+from maptool import mlog
 from maptool.util.utils import wait,wait_sep,multi_structs
-from maptool.io.read_structure import read_structures,ase2pmg
+from maptool.io.read_structure import read_structures,ase2pmg,read_structures_from_file
+from pymatgen.analysis.adsorption import AdsorbateSiteFinder
+from pymatgen.core.surface import generate_all_slabs, SlabGenerator
+from pymatgen import Structure,Molecule
 from ase.build.tube import nanotube
 from ase.io import read,write
 
@@ -54,7 +59,6 @@ c. A number, which simply scales all lattice vectors by the
         atoms=nanotube(m,n,vacuum=15)
         struct=ase2pmg(atoms)
         struct.to('POSCAR','CNT_'+str(m)+'-'+str(n)+'.vasp')
-#        write('CNT_'+str(m)+'-'+str(n)+'.vasp',atoms,vasp5=True)
         return True
     else:
         data={'max_index': 2, 'min_vacum': 20, 'min_slab': 8, 'repeat': [3, 3, 1]}
@@ -111,21 +115,34 @@ c. A number, which simply scales all lattice vectors by the
         if os.path.exists(filename):
            data=read_adsorb_config(filename)
            assert data['method'] in [1,2]
-           cryst=readstructure(filename=data['crystal'])
-           mol=readstructure(filename=data['molecule'])
+           cryst=read_structures_from_file(data['crystal'])
+           mol=read_structures_from_file(data['molecule'])
            proc_adsorb(cryst,mol,data)
         else:
            print('your choice ?')
            print('{} >>> {}'.format('1','read slab from file'))
            print('{} >>> {}'.format('2','build slab by bulk'))
            wait_sep()
-           choice=""
-           while choice=="":
-              choice=input().strip()
-           choice=int(choice)
+           in_str=wait()
+           choice=int(in_str)
            assert choice in [1,2]
            data['method']=choice
-           cryst=readstructure(crystal=True,molecule=False)
-           mol=readstructure(crystal=False,molecule=True)
+           tips="""\
+Input the structure filename of molecule and substrate
+The first file should be molecule and 2nd for crystal
+supported structure format: xsf .vasp POSCAR .nc .json .xyz ...
+paramter format, i.e. :
+mol.xyz POSCAR"""
+           structs,fnames=read_structures(tips)
+           
+           mol=structs[0] 
+           mlog.info("read mol from %s"%(fnames[0]))
+           mlog.info(mol)
+           assert isinstance(mol,Molecule),"the first file should be molecule"
+           cryst=structs[1] 
+           mlog.info("read crystal from %s"%(fnames[1]))
+           mlog.info(cryst)
+           assert isinstance(cryst,Structure),"the second file should be crystal"
            proc_adsorb(cryst,mol,data)
 
+        return True
