@@ -33,7 +33,7 @@ def pmg2ase(structure):
     return aaa.get_atoms(structure)
  
 @with_goto
-def read_structures():
+def read_structures(tips=None):
     '''
     Parsing input string from linux command line. 
 
@@ -41,7 +41,7 @@ def read_structures():
         None
     
     '''
-    print('''\
+    default_tips='''\
 Input the structure filename
 supported structure format: xsf .vasp POSCAR .nc .json .xyz ...
 paramter format, i.e. :
@@ -51,7 +51,11 @@ a.vasp b.vasp
 paramter format, i.e. :
 *.cif
 paramter format, i.e. :
-NaCl[1-2].cif''')
+NaCl[1-2].cif'''
+    if tips:
+        print(tips)
+    else:
+        print(default_tips)
     structs=[] 
     wait_sep()
     label .input
@@ -127,7 +131,6 @@ def read_structures_from_files(fnames):
 
 if __name__=='__main__':
   sts,fn=read_structures()
-  print(type(sts),type(fn))
   print("len sts: ",len(sts))
   print("len fn:",len(fn))
   for f,st in zip(fn,sts):
