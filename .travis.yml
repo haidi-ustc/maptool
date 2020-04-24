@@ -5,7 +5,7 @@ python:
 # command to install dependencies
 env:
   matrix:
-  - PYMATGEN_VERSION=2019.10.16
+  - PYMATGEN_VERSION=2020.4.2
 before_install:
   - pip install --upgrade pip coverage codecov
   - pip install pymatgen==$PYMATGEN_VERSION
