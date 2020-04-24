@@ -2,7 +2,6 @@ maptool.egg-info
 *.vasp
 *.poscar
 *.mol
-*.xyz
 *.lammps
 *.xsf
 *.o

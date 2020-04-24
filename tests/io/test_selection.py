@@ -2,8 +2,8 @@ import os
 import unittest
 import numpy as np
 from pymatgen import Structure
-from context import maptool
-from maptool.core.selection import parse_range,parse_index,parse_label,parse_sphere
+from context import *
+#from maptool.core.selection import parse_range,parse_index,parse_label,parse_sphere
 
 class Compare:
     def test_length(self):

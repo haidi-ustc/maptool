@@ -75,11 +75,11 @@ NaCl[1-2].cif'''
             print("Cannot match any files, check your input format")
             goto .input
     #print(fnames)
-    structures=read_structures_from_files(fnames)
+    structures,_fnames=read_structures_from_files(fnames)
     if len(structures)==0:
        print("Cannot parse file format, check the file concent")
        goto .input
-    return structures
+    return structures,_fnames
 
 def read_structures_from_file(fname):
     '''
