@@ -96,7 +96,7 @@ def MP_db():
     sepline(ch=" Materials Project database ",sp='=')
     print('''\
 e1 >>> get band/dos by mp-ID
-e2 >>> get structure from materialsproject database
+e2 >>> get structure by mp-ID/elements/formula
 e3 >>> get properties by mp-ID
 e4 >>> get phase graph''')
 
