@@ -10,6 +10,7 @@ from maptool.io.read_structure import read_structures
 from pymatgen import Structure,Molecule
 from pymatgen.symmetry.analyzer import PointGroupAnalyzer,SpacegroupAnalyzer
 from pymatgen.analysis.molecule_matcher import MoleculeMatcher
+from pymatgen.analysis.diffraction.xrd import XRDCalculator
 
 
 def structure_symmetry():
@@ -152,3 +153,17 @@ def rdf(structures: List[Structure],
     rdf = hist * st.num_sites / (volumes * nA * nB * rho * nsteps)
     radii = 0.5 * (edges[1:] + edges[:-1])
     return (rdf, radii)
+
+def xrd(structure: Structure):
+    '''
+    Calculate XRD pattern of given structure, raw pattern data is returned
+
+    @in
+      - structure, Structure
+    @out
+      - x, np.1darray, theta
+      - y, np.1darray, intensity
+    '''
+    c = XRDCalculator()
+    pattern = c.get_pattern(structure)
+    return (pattern.x, pattern.y)
