@@ -5,12 +5,22 @@ import numpy as np
 from typing import List, Tuple
 from nptyping import Array
 from maptool import NAME
-from maptool.util.utils import sepline,multi_structs
+from maptool.util.utils import (
+    sepline,
+    multi_structs
+)
 from maptool.io.read_structure import read_structures
-from pymatgen import Structure,Molecule
-from pymatgen.symmetry.analyzer import PointGroupAnalyzer,SpacegroupAnalyzer
+from pymatgen import (
+    Structure,
+    Molecule
+)
+from pymatgen.symmetry.analyzer import (
+    PointGroupAnalyzer,
+    SpacegroupAnalyzer
+)
 from pymatgen.analysis.molecule_matcher import MoleculeMatcher
 from pymatgen.analysis.diffraction.xrd import XRDCalculator
+from pymatgen.analysis.structure_matcher import StructureMatcher
 import matplotlib.pyplot as plt
 
 
@@ -237,3 +247,24 @@ def xrd(structure:       Structure,
                 to_be_written += " {:11.7f} {:11.7f}\n".format(_x, _y)
             print(to_be_written, file=f)
     return (p.x, p.y, x, y)
+
+
+def structure_dedup(structures: List[Structure]) -> List[Structure]:
+    '''
+    '''
+    sm = StructureMatcher()
+
+    def _match(st_ref: Structure,
+               st_lst: List[Structure]):
+        for st in st_lst:
+            if sm.fit(st, st_ref):
+                return True
+        return False
+    if len(structures) == 0 or len(structures) == 1:
+        return structures
+    else:
+        clist = [structures[0]]
+        for st in structures[1:]:
+            if not _match(st, clist):
+                clist.append(st.copy)
+        return clist
