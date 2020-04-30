@@ -4,6 +4,8 @@ import unittest
 import hashlib
 from glob import glob
 import numpy as np
+import zipfile
+import shutil
 from pymatgen.io.vasp import Xdatcar
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -107,9 +109,15 @@ class TestXRD(unittest.TestCase):
 
 class TestStructureDeduplicate(unittest.TestCase):
     def setUp(self):
+        with zipfile.ZipFile('poscars.zip', 'r') as zip_ref:
+            zip_ref.extractall(".")
         fnames = glob('poscars/POSCAR*')
+        fnames.sort()
         self.structures, self.fnames = read_structures_from_files(fnames)
         self.maxDiff = None  # see the full diff when self.assertEqual fails
+
+    def tearDown(self):
+        shutil.rmtree('poscars')
 
     def test_empty_slist(self):
         slist, flist = structure_dedup([], [])
@@ -122,33 +130,14 @@ class TestStructureDeduplicate(unittest.TestCase):
 
     def test_unequal_size_of_slist_and_flist(self):
         with self.assertRaises(AssertionError):
-            structure_dedup(self.structures, self.fnames[:5])
+            structure_dedup(self.structures, self.fnames[:4])
 
     def test_correctness(self):
         slist, flist = structure_dedup(self.structures, self.fnames)
         self.assertEqual(slist[0], self.structures[0])
-        flist.sort()
-        print(flist)
-        flist_ref = ['poscars_POSCAR_1214629',
-                     'poscars_POSCAR_1214718',
-                     'poscars_POSCAR_1214807',
-                     'poscars_POSCAR_1214896',
-                     'poscars_POSCAR_1214985',
-                     'poscars_POSCAR_1215074',
-                     'poscars_POSCAR_1215341',
-                     'poscars_POSCAR_1215431',
-                     'poscars_POSCAR_1215520',
-                     'poscars_POSCAR_1215609',
-                     'poscars_POSCAR_1215698',
-                     'poscars_POSCAR_1215787',
-                     'poscars_POSCAR_1215876',
-                     'poscars_POSCAR_1215965',
-                     'poscars_POSCAR_1216057',
-                     'poscars_POSCAR_1277944',
-                     'poscars_POSCAR_18968',
-                     'poscars_POSCAR_20426',
-                     'poscars_POSCAR_22487']
-        flist_ref.sort()
+        flist_ref = ['poscars_POSCAR_a',
+                     'poscars_POSCAR_b',
+                     'poscars_POSCAR_c']
         self.assertEqual(flist_ref, flist)
 
 
