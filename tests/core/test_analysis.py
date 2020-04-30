@@ -135,9 +135,25 @@ class TestStructureDeduplicate(unittest.TestCase):
     def test_correctness(self):
         slist, flist = structure_dedup(self.structures, self.fnames)
         self.assertEqual(slist[0], self.structures[0])
-        flist_ref = ['poscars_POSCAR_a',
-                     'poscars_POSCAR_b',
-                     'poscars_POSCAR_c']
+        flist_ref = ['poscars_POSCAR_1214540',
+                     'poscars_POSCAR_1214629',
+                     'poscars_POSCAR_1214718',
+                     'poscars_POSCAR_1214807',
+                     'poscars_POSCAR_1214896',
+                     'poscars_POSCAR_1214985',
+                     'poscars_POSCAR_1215074',
+                     'poscars_POSCAR_1215163',
+                     'poscars_POSCAR_1215252',
+                     'poscars_POSCAR_1215431',
+                     'poscars_POSCAR_1215520',
+                     'poscars_POSCAR_1215609',
+                     'poscars_POSCAR_1215787',
+                     'poscars_POSCAR_1215965',
+                     'poscars_POSCAR_1216054',
+                     'poscars_POSCAR_1277944',
+                     'poscars_POSCAR_18968',
+                     'poscars_POSCAR_20426',
+                     'poscars_POSCAR_22487']
         self.assertEqual(flist_ref, flist)
 
 
