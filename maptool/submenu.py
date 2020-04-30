@@ -9,6 +9,7 @@ from  maptool.core.twodim import  twod_operation
 from  maptool.core.randoms import random_operation
 from  maptool.core.mpdb import    get_mp_banddos, get_mp_structure,\
                                   get_mp_phase_graph, get_mp_properties
+from  maptool.core.oqmd import  get_oqmd_structure
 from  maptool.core.analysis import  structure_symmetry,get_primitive_cell,\
                                     get_conventional_cell
 from  maptool.code.vasp import   vaspinput,vaspout
@@ -199,6 +200,8 @@ def select_function(choice):
        return get_mp_properties()
     elif choice=="e4":
        return get_mp_phase_graph()
+    elif choice=="e5":
+       return get_oqmd_structure()
     elif choice=="88":
          os._exit(0)
     else:

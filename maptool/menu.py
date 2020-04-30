@@ -93,12 +93,14 @@ d7 >>> calculate phonon
 d8 >>> execute MD simulation''')
 
 def MP_db():
-    sepline(ch=" Materials Project database ",sp='=')
+    sepline(ch=" On-line database ",sp='=')
     print('''\
-e1 >>> get band/dos by mp-ID
-e2 >>> get structure by mp-ID/elements/formula
-e3 >>> get properties by mp-ID
-e4 >>> get phase graph''')
+e1 >>> (MP) get band/dos by mp-ID
+e2 >>> (MP) get structure by mp-ID/elements/formula
+e3 >>> (MP) get properties by mp-ID
+e4 >>> (MP) get phase graph
+e5 >>> (OQMD) get structure by ID/elements/formula''',
+)
 
 def local_db():
     sepline(ch=" local database ",sp='=')
