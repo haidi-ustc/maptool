@@ -5,12 +5,23 @@ import numpy as np
 from typing import List, Tuple
 from nptyping import Array
 from maptool import NAME
-from maptool.util.utils import sepline,multi_structs
+from maptool.util.utils import (
+    sepline,
+    multi_structs
+)
 from maptool.io.read_structure import read_structures
-from pymatgen import Structure,Molecule
-from pymatgen.symmetry.analyzer import PointGroupAnalyzer,SpacegroupAnalyzer
+from pymatgen import (
+    Structure,
+    Molecule
+)
+from pymatgen.symmetry.analyzer import (
+    PointGroupAnalyzer,
+    SpacegroupAnalyzer
+)
 from pymatgen.analysis.molecule_matcher import MoleculeMatcher
 from pymatgen.analysis.diffraction.xrd import XRDCalculator
+from pymatgen.analysis.structure_matcher import StructureMatcher
+import matplotlib.pyplot as plt
 
 
 def structure_symmetry():
@@ -154,16 +165,125 @@ def rdf(structures: List[Structure],
     radii = 0.5 * (edges[1:] + edges[:-1])
     return (rdf, radii)
 
-def xrd(structure: Structure):
+def xrd(structure:       Structure,
+        two_theta_range: Tuple[int, int] = (0, 120),
+        sigma:                     float = 0.05,
+        nsample:                     int = 5000,
+        fig_name:                    str = "XRD.png",
+        peak_raw_fname:              str = "",
+        plot_dat_fname:              str = ""):
     '''
     Calculate XRD pattern of given structure, raw pattern data is returned
 
     @in
       - structure, Structure
+      - two_theta_range, (int, int), range of 2Theta in XRD pattern
+      - sigma, float, gaussian smearing width
+      - nsample, int, how many points in final plot
+      - fig_name, str, name of the figure file to be written,
+        default is XRD.png
+      - peak_raw_fname, str, name of the raw data file containing 2Theta and
+        intensity.
+      - plot_dat_fname, str, name of the plot data file. That plot data was
+        used to plot the XRD pattern.
     @out
       - x, np.1darray, theta
       - y, np.1darray, intensity
+      - plot_x, np.1darray, theta of final data in plotting
+      - plot_y, np.1darray, intensity of final data in plotting
     '''
+    def _smearing(x, y,
+                  sigma=sigma,
+                  nsample=nsample) -> Tuple[Array, Array]:
+        '''
+        Apply smearing to discret delta functions to get a continuous array
+        @in
+          - x: x coordinates of peak
+          - y: peak heights
+        @out
+          - res_x
+          - res_y
+        '''
+        def _smearing_helper(x, x0, sigma=sigma):
+            return np.exp(-(x - x0)**2 / (2 * sigma**2))
+        assert x.shape == y.shape
+        npeaks = x.shape[0]
+        res_x = np.linspace(two_theta_range[0],
+                            two_theta_range[1], num=nsample)
+        smear_res = np.empty((npeaks, nsample))
+        for ipeak in range(npeaks):
+            smear_res[ipeak] = _smearing_helper(res_x, x[ipeak]) * y[ipeak]
+            pass
+        res_y = np.sum(smear_res, axis=(0))
+        return (res_x, res_y)
+
     c = XRDCalculator()
-    pattern = c.get_pattern(structure)
-    return (pattern.x, pattern.y)
+    p = c.get_pattern(structure,
+                      two_theta_range=two_theta_range)
+    (x, y) = _smearing(p.x, p.y, sigma=sigma)
+    plt.figure()
+    plt.plot(x, y)
+    plt.vlines(p.x, ymin=-5, ymax=-1)
+    plt.ylim(-5, 110)
+    plt.xlabel(r"$2\theta$ ($^\circ$)")
+    plt.ylabel(r"Intensities (scaled)")
+    if "" != fig_name:
+        plt.savefig(fig_name, dpi=800, linewidth=0.01)
+
+    if "" != peak_raw_fname:
+        with open(peak_raw_fname, 'w') as f:
+            to_be_written = "# {:^10} {:^12} {:^9}\n".format(
+                "2Theta", "Intensity", "Miller")
+            for (_x, _y, hkls) in zip(p.x, p.y, p.hkls):
+                label = ",".join([str(hkl['hkl']) for hkl in hkls])
+                to_be_written += " {:11.7f} {:11.7f} {}\n".format(_x, _y, label)
+            print(to_be_written, file=f)
+
+    if "" != plot_dat_fname:
+        with open(plot_dat_fname, 'w') as f:
+            to_be_written = "# {:^10} {:^12}\n".format(
+                "2Theta", "Intensity")
+            for (_x, _y) in np.vstack([x, y]).T:
+                to_be_written += " {:11.7f} {:11.7f}\n".format(_x, _y)
+            print(to_be_written, file=f)
+    return (p.x, p.y, x, y)
+
+
+def structure_dedup(structures: List[Structure],
+                    fnames:     List[str] = []) -> Tuple[List[Structure],
+                                                         List[str]]:
+    '''
+    Deduplicate the given structures via pymatgen.analysis.structure_matcher
+    @in
+      - structures, [Structure], given structures to be deduplicate
+      - fnames, [str], file names corresponding to structures. If left empty,
+        an empty list will be returned
+    @out
+      - [Structure], deduplicated structures
+
+    '''
+    sm = StructureMatcher()
+
+    def _match(st_ref: Structure,
+               st_lst: List[Structure]):
+        for st in st_lst:
+            if sm.fit(st, st_ref, symmetric=True):
+                return True
+        return False
+
+    assert len(fnames) == 0 or len(fnames) == len(structures),\
+        'fname list should be empty or have same size with structures list'
+
+    if len(structures) == 0 or len(structures) == 1:
+        return structures, fnames
+    else:
+        clist = []
+        ilist = []
+        for (i, st) in enumerate(structures):
+            if not _match(st, clist):
+                clist.append(st.copy())
+                ilist.append(i)
+        flist = []
+        if len(fnames) != 0:
+            flist = [fnames[i] for i in ilist]
+        return clist, flist
