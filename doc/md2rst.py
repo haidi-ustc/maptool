@@ -19,4 +19,8 @@ def md_to_rst(from_file, to_file):
         print("https://docverter.com/")
 
 if __name__ == '__main__':
+<<<<<<< Updated upstream
     md_to_rst("../README.md", "maindoc.rst")
+=======
+    md_to_rst("../README.md", "main.rst")
+>>>>>>> Stashed changes
