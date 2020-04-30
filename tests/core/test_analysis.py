@@ -109,6 +109,7 @@ class TestStructureDeduplicate(unittest.TestCase):
     def setUp(self):
         fnames = glob('poscars/POSCAR*')
         self.structures, self.fnames = read_structures_from_files(fnames)
+        self.maxDiff = None  # see the full diff when self.assertEqual fails
 
     def test_empty_slist(self):
         slist, flist = structure_dedup([], [])
