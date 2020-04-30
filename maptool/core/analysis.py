@@ -277,10 +277,13 @@ def structure_dedup(structures: List[Structure],
     if len(structures) == 0 or len(structures) == 1:
         return structures, fnames
     else:
-        clist = [structures[0]]
-        flist = [fnames[0]]
-        for (st, fn) in zip(structures[1:], fnames[1:]):
+        clist = []
+        ilist = []
+        for (i, st) in enumerate(structures):
             if not _match(st, clist):
                 clist.append(st.copy())
-                flist.append(fn)
+                ilist.append(i)
+        flist = []
+        if len(fnames) != 0:
+            flist = [fnames[i] for i in ilist]
         return clist, flist

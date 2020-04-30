@@ -109,10 +109,23 @@ class TestStructureDeduplicate(unittest.TestCase):
     def setUp(self):
         fnames = glob('poscars/POSCAR*')
         self.structures, self.fnames = read_structures_from_files(fnames)
-        # print(self.structures)
+
+    def test_empty_slist(self):
+        slist, flist = structure_dedup([], [])
+        self.assertEqual(slist, [])
+        self.assertEqual(flist, [])
+
+    def test_empty_flist(self):
+        _, flist = structure_dedup(self.structures, [])
+        self.assertEqual(flist, [])
+
+    def test_unequal_size_of_slist_and_flist(self):
+        with self.assertRaises(AssertionError):
+            structure_dedup(self.structures, self.fnames[:5])
 
     def test_correctness(self):
         slist, flist = structure_dedup(self.structures, self.fnames)
+        self.assertEqual(slist[0], self.structures[0])
         flist.sort()
         flist_ref = ['poscars_POSCAR_1214629',
                      'poscars_POSCAR_1214718',
@@ -133,6 +146,7 @@ class TestStructureDeduplicate(unittest.TestCase):
                      'poscars_POSCAR_18968',
                      'poscars_POSCAR_20426',
                      'poscars_POSCAR_22487']
+        flist_ref.sort()
         self.assertEqual(flist_ref, flist)
 
 
