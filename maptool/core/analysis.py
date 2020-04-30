@@ -249,22 +249,38 @@ def xrd(structure:       Structure,
     return (p.x, p.y, x, y)
 
 
-def structure_dedup(structures: List[Structure]) -> List[Structure]:
+def structure_dedup(structures: List[Structure],
+                    fnames:     List[str] = []) -> Tuple[List[Structure],
+                                                         List[str]]:
     '''
+    Deduplicate the given structures via pymatgen.analysis.structure_matcher
+    @in
+      - structures, [Structure], given structures to be deduplicate
+      - fnames, [str], file names corresponding to structures. If left empty,
+        an empty list will be returned
+    @out
+      - [Structure], deduplicated structures
+
     '''
     sm = StructureMatcher()
 
     def _match(st_ref: Structure,
                st_lst: List[Structure]):
         for st in st_lst:
-            if sm.fit(st, st_ref):
+            if sm.fit(st, st_ref, symmetric=True):
                 return True
         return False
+
+    assert len(fnames) == 0 or len(fnames) == len(structures),\
+        'fname list should be empty or have same size with structures list'
+
     if len(structures) == 0 or len(structures) == 1:
-        return structures
+        return structures, fnames
     else:
         clist = [structures[0]]
-        for st in structures[1:]:
+        flist = [fnames[0]]
+        for (st, fn) in zip(structures[1:], fnames[1:]):
             if not _match(st, clist):
-                clist.append(st.copy)
-        return clist
+                clist.append(st.copy())
+                flist.append(fn)
+        return clist, flist

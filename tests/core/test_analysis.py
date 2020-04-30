@@ -2,6 +2,7 @@ import sys
 import os
 import unittest
 import hashlib
+from glob import glob
 import numpy as np
 from pymatgen.io.vasp import Xdatcar
 
@@ -11,6 +12,20 @@ from .context import setUpModule
 from .context import rdf
 from .context import xrd
 from .context import read_structures_from_file
+from .context import read_structures_from_files
+from .context import structure_dedup
+
+
+def hash_file(fname: str):
+    BLOCK_SIZE = 65536
+    file_hash = hashlib.sha256()
+    with open(fname, 'rb') as f:
+        fb = f.read(BLOCK_SIZE)
+        while len(fb) > 0:
+            file_hash.update(fb)
+            fb = f.read(BLOCK_SIZE)
+    return file_hash.hexdigest()
+
 
 class TestRDF(unittest.TestCase):
     def setUp(self):
@@ -80,15 +95,6 @@ class TestXRD(unittest.TestCase):
         hash_XRD_peak = "6036c73a4f3266b35630c08d22ad19d8c839bfb4aca337c34422b60c20940232"
         hash_XRD_plot = "10fded6ef88ca3d37b4d4c461479d425675ad88a445989b17ed0a67a2f39e041"
 
-        def hash_file(fname: str):
-            BLOCK_SIZE = 65536
-            file_hash = hashlib.sha256()
-            with open(fname, 'rb') as f:
-                fb = f.read(BLOCK_SIZE)
-                while len(fb) > 0:
-                    file_hash.update(fb)
-                    fb = f.read(BLOCK_SIZE)
-            return file_hash.hexdigest()
 
         # self.assertEqual(hash_XRD_png, hash_file(fig_name))
         self.assertEqual(hash_XRD_peak, hash_file(peak_raw_fname))
@@ -98,6 +104,36 @@ class TestXRD(unittest.TestCase):
         os.remove(peak_raw_fname)
         os.remove(plot_dat_fname)
 
+
+class TestStructureDeduplicate(unittest.TestCase):
+    def setUp(self):
+        fnames = glob('poscars/POSCAR*')
+        self.structures, self.fnames = read_structures_from_files(fnames)
+        # print(self.structures)
+
+    def test_correctness(self):
+        slist, flist = structure_dedup(self.structures, self.fnames)
+        flist.sort()
+        flist_ref = ['poscars_POSCAR_1214629',
+                     'poscars_POSCAR_1214718',
+                     'poscars_POSCAR_1214807',
+                     'poscars_POSCAR_1214896',
+                     'poscars_POSCAR_1214985',
+                     'poscars_POSCAR_1215074',
+                     'poscars_POSCAR_1215341',
+                     'poscars_POSCAR_1215431',
+                     'poscars_POSCAR_1215520',
+                     'poscars_POSCAR_1215609',
+                     'poscars_POSCAR_1215698',
+                     'poscars_POSCAR_1215787',
+                     'poscars_POSCAR_1215876',
+                     'poscars_POSCAR_1215965',
+                     'poscars_POSCAR_1216057',
+                     'poscars_POSCAR_1277944',
+                     'poscars_POSCAR_18968',
+                     'poscars_POSCAR_20426',
+                     'poscars_POSCAR_22487']
+        self.assertEqual(flist_ref, flist)
 
 
 if '__main__' == __name__:
