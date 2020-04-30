@@ -128,6 +128,7 @@ class TestStructureDeduplicate(unittest.TestCase):
         slist, flist = structure_dedup(self.structures, self.fnames)
         self.assertEqual(slist[0], self.structures[0])
         flist.sort()
+        print(flist)
         flist_ref = ['poscars_POSCAR_1214629',
                      'poscars_POSCAR_1214718',
                      'poscars_POSCAR_1214807',
