@@ -8,12 +8,14 @@ from maptool.util.utils import wait,wait_sep,multi_structs
 from pymatgen.symmetry.analyzer import PointGroupAnalyzer
 from pymatgen import Structure,Molecule,Composition
 from spglib import get_symmetry_dataset
+from maptool import PYXTAL
 
-from pyxtal.symmetry import get_symbol_and_number
-from pyxtal.crystal import (random_crystal, 
-                           random_crystal_1D, 
-                           random_crystal_2D, 
-                           random_cluster )
+if PYXTAL:
+   from pyxtal.symmetry import get_symbol_and_number
+   from pyxtal.crystal import (random_crystal, 
+                              random_crystal_1D, 
+                              random_crystal_2D, 
+                              random_cluster )
 
 def random_operation(choice):
     assert choice in ["1","2","3","4"]
@@ -72,6 +74,10 @@ def get_random_structure(elem,num_atom,sg,dim,thickness=0):
         i+=1
 
 def random_structure():
+    if not PYXTAL:
+       print("Please install Pyxtal firstly, you may download it here")
+       print("git clone git@github.com:qzhu2017/PyXtal.git")
+       os._exit(0)
     print("Input the formula, space group and dimension")
     print("Ff the space group sets to 0, it will use random one")
     print("the dimension can be 0,1,2 and 3")

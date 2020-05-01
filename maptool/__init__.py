@@ -46,6 +46,12 @@ try:
 except ImportError:
    TQDM=False
 
+try:
+   import pyxtal
+   PYXTAL=True
+except ImportError:
+   PYXTAL=False
+
 def info():
     """
         Show basic information about """+ NAME + """, its location and version.
