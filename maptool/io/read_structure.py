@@ -3,8 +3,9 @@ import glob
 from ase.io import read 
 from goto import with_goto
 from pymatgen import Structure,Molecule
-from maptool.util.utils import sepline,wait_sep,wait
 from pymatgen.io.ase import AseAtomsAdaptor
+from maptool import mlog
+from maptool.util.utils import sepline,wait_sep,wait
 
 def ase2pmg(atoms):
     '''
@@ -65,7 +66,7 @@ NaCl[1-2].cif'''
         return None,None
 
     if '*' in in_str or '[' in in_str or '?' in in_str:
-        fnames=glob.glob(in_str)
+        fnames=sorted(glob.glob(in_str))
         if len(fnames)==0:
             print("Cannot match any files, check your input format")
             goto .input
@@ -119,7 +120,7 @@ def read_structures_from_files(fnames):
     assert isinstance(fnames,list)
     for fname in fnames:
         structure=read_structures_from_file(fname)
-        #print(structure)
+        mlog.debug(structure)
         if structure is not None:
             structures.append(structure)
             if '/' in fname:

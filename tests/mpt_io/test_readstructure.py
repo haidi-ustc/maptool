@@ -15,7 +15,6 @@ from .context import  ( ase2pmg, pmg2ase,
                     read_structures_from_files  )
 
 class TestAse2Pmg(unittest.TestCase):
-    print(os.getcwd())
     def test_length(self):
         self.assertEqual(len(self.system_1),len(self.system_2))
     def test_equal(self):
