@@ -128,11 +128,12 @@ d5 >>> calculate dos by HSE06
 d6 >>> calculate elastic properties
 d7 >>> calculate phonon
 d8 >>> execute MD simulation
-===================== Materials Project database =====================
-e1 >>> get band/dos by mp-ID
-e2 >>> get structure from materialsproject database
-e3 >>> get properties by mp-ID
-e4 >>> get phase graph
+========================== On-line database ==========================
+e1 >>> (MP) get band/dos by mp-ID
+e2 >>> (MP) get structure by mp-ID/elements/formula
+e3 >>> (MP) get properties by mp-ID
+e4 >>> (MP) get phase graph
+e5 >>> (OQMD) get structure by ID/elements/formula
 =========================== local database ===========================
 f1 >>> check local database
 f2 >>> get entry by l-ID
@@ -140,7 +141,6 @@ f3 >>> get entry by formula
 f4 >>> get entry by element
 f5 >>> insert entry into database
 ======================================================================
-
 
 0  >>> back
 88 >>> exit
