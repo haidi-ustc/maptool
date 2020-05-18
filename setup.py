@@ -21,12 +21,12 @@ today = datetime.date.today().strftime("%b-%d-%Y")
 with open(path.join(default_prefix, '_date.py'), 'w') as fp :
     fp.write('date = \'%s\'' % today)
 
-install_requires=["pymatgen==2020.4.2",
+install_requires=["pymatgen",
                    "ase",
                    "dpdata",
                    "pandas",
                    "goto-statement",
-                   "paramiko==2.6.0",
+                   "paramiko",
                    "nptyping"],
 
 setup(
