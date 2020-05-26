@@ -21,6 +21,7 @@ from pymatgen.symmetry.analyzer import (
 from pymatgen.analysis.molecule_matcher import MoleculeMatcher
 from pymatgen.analysis.diffraction.xrd import XRDCalculator
 from pymatgen.analysis.structure_matcher import StructureMatcher
+from pymatgen.analysis.structure_prediction.volume_predictor import DLSVolumePredictor
 import matplotlib.pyplot as plt
 
 
@@ -287,3 +288,22 @@ def structure_dedup(structures: List[Structure],
         if len(fnames) != 0:
             flist = [fnames[i] for i in ilist]
         return clist, flist
+
+
+def volume_predict(structure: Structure) -> (
+        Structure, float):
+    '''
+    Returns the scaled structure and volume of given structure according to
+    pymatgen's prediction
+
+    @in
+      - structure, Structure, given structure
+    @out
+      - Structure, scaled structure
+      - float, volume of the scaled strcture
+    '''
+    dls = DLSVolumePredictor()
+    st = structure
+    dls_st = dls.get_predicted_structure(st)
+    volume = dls.predict(st)
+    return (dls_st, volume)

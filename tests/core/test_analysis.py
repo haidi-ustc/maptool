@@ -16,6 +16,7 @@ from .context import xrd
 from .context import read_structures_from_file
 from .context import read_structures_from_files
 from .context import structure_dedup
+from .context import volume_predict
 
 
 def hash_file(fname: str):
@@ -155,6 +156,38 @@ class TestStructureDeduplicate(unittest.TestCase):
                      'poscars_POSCAR_20426',
                      'poscars_POSCAR_22487']
         self.assertEqual(flist_ref, flist)
+
+
+class TestVolumePrediction(unittest.TestCase):
+    def setUp(self):
+        with zipfile.ZipFile('poscars.zip', 'r') as zip_ref:
+            zip_ref.extractall(".")
+        fnames = glob('poscars/POSCAR*')
+        fnames.sort()
+        self.structures, self.fnames = read_structures_from_files(fnames)
+        self.threshold = 1.0E-7
+
+    def tearDown(self):
+        shutil.rmtree('poscars')
+
+    def test_correctness(self):
+        slist, _ = structure_dedup(self.structures, self.fnames)
+        vol_res = []
+        for st in slist:
+            # print(st.volume) # verified that predicted volume differs from original structure
+            _, vol = volume_predict(st)
+            vol_res.append(vol)
+        
+        vol_res = np.asarray(vol_res)
+        vol_ref = np.asarray([16.283618680367098, 18.390564319283587, 100.920223395000022,
+                              612.643978060221343, 437.851283388348634, 184.228115058296567,
+                              91.183443720018275, 17.727358636867457, 36.743195837240641,
+                              66.481879066043149, 56.018697231000004, 45.110709029127158,
+                              43.493860832764867, 108.400475447999980, 49.706824964838958,
+                              656.009563911416535, 141.903994464274035, 46.616414976000002,
+                              300.367227097914167])
+        diff = np.sum(np.abs(vol_res - vol_ref))
+        self.assertGreater(self.threshold, diff)
 
 
 if '__main__' == __name__:
