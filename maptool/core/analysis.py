@@ -40,9 +40,9 @@ def structure_symmetry():
             sepline()
         if isinstance(struct,Molecule):
             print("{:<20} : {}".format('File Name',fname))
-            sa=PointGroupAnalyzer(struct)
+            pga=PointGroupAnalyzer(struct)
             print("{:<20} : {:<15}".format('Structure Type','non-periodicity'))
-            print("{:<20} : {:<15}".format('International Symbol',ast.get_pointgroup()))
+            print("{:<20} : {:<15}".format('International Symbol',str(pga.get_pointgroup())))
     return True
 
 
