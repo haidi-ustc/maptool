@@ -3,7 +3,7 @@
 
 import numpy as np
 from typing import List, Tuple
-from nptyping import Array
+from nptyping import NDArray
 from maptool import NAME
 from maptool.util.utils import (
     sepline,
@@ -94,7 +94,7 @@ def rdf(structures: List[Structure],
         r:                    float = 10,
         nbins:                  int = 80,
         range:  Tuple[float, float] = (0, 10),
-        elem_pair:  Tuple[str, str] = ('', '')) -> Tuple[Array, Array]:
+        elem_pair:  Tuple[str, str] = ('', '')) -> Tuple[NDArray, NDArray]:
     '''
     Calculate radial distribution function for given trajectory
 
@@ -110,7 +110,7 @@ def rdf(structures: List[Structure],
     @out
       - (np.1darray, np.1darray), (rdf, radii) data.
     '''
-    def shell_volumes(edges: Array):
+    def shell_volumes(edges: NDArray):
         '''
         Calculates the shells' volume for given radii
         '''
@@ -118,8 +118,8 @@ def rdf(structures: List[Structure],
         return 4 * np.pi * (edges[1:] - edges[:-1]) / 3
 
     def rdf_helper(s:          Structure,
-                   Aindices: Array[bool],
-                   Bindices: Array[bool]) -> Array:
+                   Aindices: NDArray[bool],
+                   Bindices: NDArray[bool]) -> NDArray:
         '''
         The helper function. return the histogram data for each structure
         '''
@@ -195,7 +195,7 @@ def xrd(structure:       Structure,
     '''
     def _smearing(x, y,
                   sigma=sigma,
-                  nsample=nsample) -> Tuple[Array, Array]:
+                  nsample=nsample) -> Tuple[NDArray, NDArray]:
         '''
         Apply smearing to discret delta functions to get a continuous array
         @in
