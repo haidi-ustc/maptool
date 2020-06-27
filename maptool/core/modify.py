@@ -6,7 +6,7 @@ from random import randint
 import itertools
 import numpy as np
 from typing import List, Tuple, Dict, Any
-from nptyping import Array
+from nptyping import NDArray
 from pymatgen import (
   Structure,
   Molecule,
@@ -226,7 +226,7 @@ class StructureChanger:
     return self.swap_site((index0, index1))
 
   def deform_cell(self,
-                  stress_eps: Array[float]) -> Structure:
+                  stress_eps: NDArray[float]) -> Structure:
     '''
     Deform the lattice of the structure
 
@@ -282,7 +282,7 @@ class StructureChanger:
 
   def move_one_atom(self,
                     index:           int,
-                    vector: Array[float]) -> Structure:
+                    vector: NDArray[float]) -> Structure:
     '''
     Move one atom with given move vector
 
@@ -367,7 +367,7 @@ class StructureChanger:
       return self.random_move_one_atom(mu=epsilon, sigma=0.01)
 
   @staticmethod
-  def rotation_x(theta: float) -> Array[float]:
+  def rotation_x(theta: float) -> NDArray[float]:
     """
     Create a rotation matrix around the 'x' axis
 
@@ -388,7 +388,7 @@ class StructureChanger:
                      [0, np.sin(theta),  np.cos(theta)]])
 
   @staticmethod
-  def rotation_y(theta: float) -> Array[float]:
+  def rotation_y(theta: float) -> NDArray[float]:
     """
     Create a rotation matrix around the 'y' axis
 
@@ -409,7 +409,7 @@ class StructureChanger:
                      [-np.sin(theta), 0, np.cos(theta)]])
 
   @staticmethod
-  def rotation_z(theta: float) -> Array[float]:
+  def rotation_z(theta: float) -> NDArray[float]:
     """
     Create a rotation matrix around the 'z' axis
 
@@ -430,10 +430,10 @@ class StructureChanger:
 
   @classmethod
   def apply_rotation(cls,
-                     vector: Array[float],
+                     vector: NDArray[float],
                      theta_x: float,
                      theta_y: float,
-                     theta_z: float) -> Array[float]:
+                     theta_z: float) -> NDArray[float]:
     """
     Apply a rotation matrix to a vector by succesive rotations around
     the three axis 'x', 'y' and 'z'
