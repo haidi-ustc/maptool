@@ -30,3 +30,6 @@ setuptools*
 doc/_build*
 tmp
 .eggs
+maptool/_date.py
+maptool/_version.py
+
