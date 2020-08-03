@@ -124,9 +124,10 @@ def read_structures_from_files(fnames):
         if structure is not None:
             structures.append(structure)
             if '/' in fname:
-               final_fnames.append(fname.replace('/','_'))
-            else:
-               final_fnames.append(fname)
+               fname=fname.replace('/','_')
+            if '.' in fname:
+               fname=fname.replace('.','_')
+            final_fnames.append(fname)
 
     return structures,final_fnames
 
