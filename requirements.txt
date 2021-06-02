@@ -53,7 +53,7 @@ tabulate==0.8.7
 tqdm==4.45.0
 traitlets==4.3.3
 typish==1.6.0
-urllib3==1.25.9
+urllib3==1.26.5
 wcwidth==0.1.9
 custodian==2020.4.27
 ase==3.19.1
