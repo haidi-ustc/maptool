@@ -20,7 +20,7 @@ monty==3.0.2
 mpmath==1.1.0
 networkx==2.4
 nptyping==1.2.0
-numpy==1.18.3
+numpy==1.22.0
 palettable==3.3.0
 pandas==1.0.3
 paramiko==2.6.0
